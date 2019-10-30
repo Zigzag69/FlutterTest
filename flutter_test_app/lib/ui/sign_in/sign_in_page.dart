@@ -11,7 +11,7 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
         body: Center(
           child: Text(
-            "Flutter Test App",
+            "Sign In",
             style:
                 TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
           ),
