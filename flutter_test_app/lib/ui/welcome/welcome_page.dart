@@ -48,58 +48,14 @@ class _WelcomePageState extends State<WelcomePage> {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                           minHeight: constraints.maxHeight),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(16, 11, 16, 36),
-                        child: IntrinsicHeight(
-                          child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Request a game',
-                                style: TextStyle(
-                                  letterSpacing: 1.15,
-                                  fontFamily: 'poppins_bold',
-                                  fontSize: 28,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              SizedBox(height: 18),
-                              Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.only(top: 36),
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    height: 65,
-                                    width: double.infinity,
-                                    child: RaisedButton(
-                                      color: Color(0xFFBD10E0),
-                                      splashColor: Colors.brown,
-                                      elevation: 0,
-                                      highlightElevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(3)),
-                                      child: Text(
-                                        'Confirm',
-                                        style: TextStyle(
-                                          fontFamily: 'poppins_medium',
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                          letterSpacing: 1.44,
-                                        ),
-                                      ),
-                                      onPressed: () {
-
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "WELCOME",
+                          style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
                         ),
-                      ),
+                      )
                     ),
                   );
                 },

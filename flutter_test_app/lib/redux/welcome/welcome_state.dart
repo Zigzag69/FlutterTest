@@ -2,14 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class WelcomeState extends Equatable {
-  WelcomeState() : super([]);
+class WelcomePageState extends Equatable {
+  WelcomePageState() : super([]);
 
-  factory WelcomeState.initial() {
-    return WelcomeState();
+  factory WelcomePageState.initial() {
+    return WelcomePageState();
   }
 
-  WelcomeState copyWith() {
-    return WelcomeState();
+  WelcomePageState copyWith() {
+    return WelcomePageState();
   }
 }

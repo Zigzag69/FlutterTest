@@ -4,24 +4,24 @@ import 'package:flutter_test_app/redux/welcome/welcome_state.dart';
 
 @immutable
 class AppState extends Equatable {
-  final WelcomeState welcomeState;
+  final WelcomePageState welcomePageState;
   AppState({
-    this.welcomeState,
+    this.welcomePageState,
   }) : super([
-    welcomeState,
+    welcomePageState,
   ]);
 
   factory AppState.initial() {
     return AppState(
-      welcomeState: WelcomeState.initial(),
+      welcomePageState: WelcomePageState.initial(),
     );
   }
 
   AppState copyWith({
-    WelcomeState loginState,
+    WelcomePageState welcomeState,
   }) {
     return AppState(
-      welcomeState: loginState ?? this.welcomeState,
+      welcomePageState: welcomeState ?? this.welcomePageState,
     );
   }
 }
