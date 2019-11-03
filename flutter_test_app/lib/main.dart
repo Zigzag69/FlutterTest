@@ -13,8 +13,7 @@ Future<Store<AppState>> appStore() async {
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.dark,
+      statusBarColor: Color(0xff26000000),
     ),
   );
   SystemChrome.setPreferredOrientations([

@@ -29,6 +29,14 @@ class _WelcomePageState extends State<WelcomePage> {
         Positioned.fill(
           child: Container(
             color: Color(0xff5eab9f),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                'assets/images/img_plane_bg.png',
+               width: MediaQuery.of(context).size.width,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
           ),
         ),
         Scaffold(
@@ -44,20 +52,64 @@ class _WelcomePageState extends State<WelcomePage> {
             builder: (BuildContext context, WelcomePageViewModel vm) {
               return LayoutBuilder(
                 builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "WELCOME",
-                          style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-                        ),
-                      )
-                    ),
-                  );
+                  return Padding(
+                      padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 44),
+                            child: Text(
+                              "Welcome to Flutter Test App",
+                              style: TextStyle(
+                                  fontSize: 26,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 32),
+                              child: SizedBox(
+                                height: 44,
+                                child: RaisedButton(
+                                  color: Color(0xffe1594b),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(22.0),
+                                  ),
+                                  child: Text(
+                                    'Войти',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 32),
+                              child: SizedBox(
+                                height: 44,
+                                child: RaisedButton(
+                                  color: Color(0xff5eab9f),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(22.0),
+                                      side: BorderSide(color: Colors.white)),
+                                  child: Text(
+                                    'Регистрация',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              )),
+                        ],
+                      ));
                 },
               );
             },
