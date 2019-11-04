@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
@@ -6,6 +7,7 @@ import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/sign_in/sign_in_actions.dart';
 import 'package:flutter_test_app/ui/sign_in/sign_in_vm.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -51,6 +53,20 @@ class _SignInPageState extends State<SignInPage> {
     Navigator.of(context).pop();
   }
 
+  Future<void> _signIn() async {
+    try {
+      FirebaseUser user = (await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: _emailController.text,
+                  password: _passwordController.text))
+          .user;
+      print("SUCCESS");
+    } catch (error) {
+      print("ERROR");
+      print(error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -71,7 +87,6 @@ class _SignInPageState extends State<SignInPage> {
         ),
         Scaffold(
           key: _scaffoldKey,
-//          resizeToAvoidBottomPadding: false,
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -227,7 +242,10 @@ class _SignInPageState extends State<SignInPage> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        print("press");
+                                        _signIn();
+                                      },
                                     ),
                                   )),
                               Padding(
