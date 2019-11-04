@@ -14,6 +14,21 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   GlobalKey<ScaffoldState> _scaffoldKey;
+  String _emailError;
+  TextEditingController _emailController;
+  String _passwordError;
+  TextEditingController _passwordController;
+  double topPaddingText;
+  FocusNode _passwordFocusNode;
+  FocusNode _emailFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaffoldKey = GlobalKey<ScaffoldState>();
+    _passwordFocusNode = FocusNode();
+    _emailFocusNode = FocusNode();
+  }
 
   _onInit(Store<AppState> store) {}
 
@@ -33,12 +48,13 @@ class _SignInPageState extends State<SignInPage> {
       children: [
         Positioned.fill(
           child: Container(
-            color: Color(0xff5eab9f),
+            color: Colors.white,
             child: Align(
               alignment: Alignment.topCenter,
               child: Image.asset(
                 'assets/images/img_plane_bg.png',
                 width: MediaQuery.of(context).size.width,
+                height: 234,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -66,68 +82,119 @@ class _SignInPageState extends State<SignInPage> {
               return LayoutBuilder(
                 builder: (context, constraints) {
                   return Padding(
-                      padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+                      padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+//                        mainAxisAlignment: MainAxisAlignment.start,
+//                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(top: 190),
-//                            child: Text(
-//                              "Вход",
-//                              style: TextStyle(
-//                                  fontSize: 26,
-//                                  color: Colors.black,
-//                                  fontWeight: FontWeight.bold),
-//                            ),
+                              padding: EdgeInsets.only(
+                                  top: 190 - AppBar().preferredSize.height),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  "Вход",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: Color(0xff5eab9f),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )),
+                          SizedBox(height: 8),
+                          TextField(
+                            focusNode: _emailFocusNode,
+                            onSubmitted: (email) {
+                              FocusScope.of(context)
+                                  .requestFocus(_passwordFocusNode);
+                            },
+                            textInputAction: TextInputAction.next,
+                            cursorColor: Color(0xff979797),
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              labelStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Color(0xff7acfc2),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xff995eab9f)),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xff995eab9f), width: 2),
+                              ),
+                              errorText: _emailError,
+                              errorMaxLines: 1,
+                              errorStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.red,
+                              ),
+                            ),
+                            onChanged: (phone) {
+                              setState(() => _emailError = null);
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            maxLines: 1,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(256),
+                            ],
+                            autocorrect: false,
+                            controller: _emailController,
+                            style: TextStyle(
+                              letterSpacing: 1.2,
+                              fontFamily: 'poppins_medium',
+                              fontSize: 24,
+                              color: Color(0xff484848),
+                            ),
                           ),
-//                          Padding(
-//                              padding: const EdgeInsets.only(top: 32),
-//                              child: SizedBox(
-//                                height: 44,
-//                                child: RaisedButton(
-//                                  color: Color(0xffe1594b),
-//                                  shape: RoundedRectangleBorder(
-//                                    borderRadius:
-//                                        new BorderRadius.circular(22.0),
-//                                  ),
-//                                  child: Text(
-//                                    'Войти',
-//                                    style: TextStyle(
-//                                      fontSize: 16,
-//                                      color: Colors.white,
-//                                    ),
-//                                  ),
-//                                  onPressed: () {
-//                                    print("Войти");
-//                                  },
-//                                ),
-//                              )),
-//                          Padding(
-//                              padding: const EdgeInsets.only(top: 32),
-//                              child: SizedBox(
-//                                height: 44,
-//                                child: RaisedButton(
-//                                  color: Color(0xff5eab9f),
-//                                  shape: RoundedRectangleBorder(
-//                                      borderRadius:
-//                                          new BorderRadius.circular(22.0),
-//                                      side: BorderSide(color: Colors.white)),
-//                                  child: Text(
-//                                    'Регистрация',
-//                                    style: TextStyle(
-//                                      fontSize: 16,
-//                                      color: Colors.white,
-//                                    ),
-//                                  ),
-//                                  onPressed: () {
-//                                    print("Регистрация");
-//                                  },
-//                                ),
-//                              )),
+//                          TextField(
+//                            focusNode: _passwordFocusNode,
+//                            textInputAction: TextInputAction.done,
+//                            cursorColor: Color(0xff979797),
+//                            decoration: InputDecoration(
+//                              labelText: 'Email',
+//                              labelStyle: TextStyle(
+//                                fontWeight: FontWeight.bold,
+//                                fontSize: 18,
+//                                color: Color(0xff7acfc2),
+//                              ),
+//                              enabledBorder: UnderlineInputBorder(
+//                                borderSide:
+//                                    BorderSide(color: Color(0xff995eab9f)),
+//                              ),
+//                              focusedBorder: UnderlineInputBorder(
+//                                borderSide: BorderSide(
+//                                    color: Color(0xff995eab9f), width: 2),
+//                              ),
+//                              errorText: _emailError,
+//                              errorMaxLines: 1,
+//                              errorStyle: TextStyle(
+//                                fontWeight: FontWeight.bold,
+//                                fontSize: 10,
+//                                color: Colors.red,
+//                              ),
+//                            ),
+//                            onChanged: (phone) {
+//                              setState(() => _emailError = null);
+//                            },
+//                            keyboardType: TextInputType.emailAddress,
+//                            maxLines: 1,
+//                            inputFormatters: [
+//                              LengthLimitingTextInputFormatter(256),
+//                            ],
+//                            autocorrect: false,
+//                            controller: _emailController,
+//                            style: TextStyle(
+//                              letterSpacing: 1.2,
+//                              fontFamily: 'poppins_medium',
+//                              fontSize: 24,
+//                              color: Color(0xff484848),
+//                            ),
+//                          ),
                         ],
-                      )
-                  );
+                      ));
                 },
               );
             },

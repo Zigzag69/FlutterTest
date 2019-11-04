@@ -15,6 +15,12 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   GlobalKey<ScaffoldState> _scaffoldKey;
 
+  @override
+  void initState() {
+    super.initState();
+    _scaffoldKey = GlobalKey<ScaffoldState>();
+  }
+
   _onInit(Store<AppState> store) {}
 
   _onDispose(Store<AppState> store) {}
