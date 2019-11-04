@@ -5,8 +5,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
-import 'package:flutter_test_app/redux/sign_in/sign_in_actions.dart';
-import 'package:flutter_test_app/ui/sign_in/sign_in_vm.dart';
+import 'package:flutter_test_app/redux/sign_up/sign_up_actions.dart';
+import 'package:flutter_test_app/ui/sign_up/sign_up_vm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInPage extends StatefulWidget {
@@ -45,9 +45,9 @@ class _SignInPageState extends State<SignInPage> {
 
   _onDispose(Store<AppState> store) {}
 
-  _onWillChange(SignInPageViewModel vm) {}
+  _onWillChange(SignUpPageViewModel vm) {}
 
-  _onDidChange(SignInPageViewModel vm) {}
+  _onDidChange(SignUpPageViewModel vm) {}
 
   _goBack() {
     Navigator.of(context).pop();
@@ -61,6 +61,8 @@ class _SignInPageState extends State<SignInPage> {
                   password: _passwordController.text))
           .user;
       print("SUCCESS");
+      Navigator.of(context)
+          .pushNamed(AppRoutes.home_page);
     } catch (error) {
       print("ERROR");
       print(error.toString());
@@ -98,12 +100,12 @@ class _SignInPageState extends State<SignInPage> {
           ),
           body: StoreConnector(
             distinct: true,
-            converter: SignInPageViewModel.fromStore,
+            converter: SignUpPageViewModel.fromStore,
             onInit: _onInit,
             onDispose: _onDispose,
             onWillChange: _onWillChange,
             onDidChange: _onDidChange,
-            builder: (BuildContext context, SignInPageViewModel vm) {
+            builder: (BuildContext context, SignUpPageViewModel vm) {
               return Padding(
                 padding: const EdgeInsets.only(top: 0),
                 child: LayoutBuilder(

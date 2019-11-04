@@ -40,7 +40,8 @@ class _WelcomePageState extends State<WelcomePage> {
               alignment: Alignment.bottomCenter,
               child: Image.asset(
                 'assets/images/img_plane_bg.png',
-               width: MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width,
+                height: 234,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -94,9 +95,8 @@ class _WelcomePageState extends State<WelcomePage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.of(context).pushNamed(
-                                        AppRoutes.sign_in_page
-                                    );
+                                    Navigator.of(context)
+                                        .pushNamed(AppRoutes.sign_in_page);
                                   },
                                 ),
                               )),
@@ -118,7 +118,10 @@ class _WelcomePageState extends State<WelcomePage> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pushNamed(AppRoutes.sign_up_page);
+                                  },
                                 ),
                               )),
                         ],
