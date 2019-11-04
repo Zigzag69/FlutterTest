@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/welcome/welcome_actions.dart';
@@ -85,7 +86,11 @@ class _WelcomePageState extends State<WelcomePage> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pushNamed(
+                                        AppRoutes.sign_in_page
+                                    );
+                                  },
                                 ),
                               )),
                           Padding(

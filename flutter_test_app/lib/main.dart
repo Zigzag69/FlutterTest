@@ -1,5 +1,7 @@
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:flutter_test_app/redux/base/app_reducer.dart';
+import 'package:flutter_test_app/ui/sign_in/sign_in_page.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +48,16 @@ class FlutterTestAppState extends State<FlutterTestApp> {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           home: WelcomePage(),
+          onGenerateRoute: (RouteSettings settings) {
+            final routes = <String, WidgetBuilder>{
+              AppRoutes.sign_in_page: (context) => SignInPage(),
+            };
+            final builder = routes[settings.name];
+            return MaterialPageRoute(
+              settings: RouteSettings(name: settings.name),
+              builder: (context) => builder(context),
+            );
+          },
         ));
   }
 }
