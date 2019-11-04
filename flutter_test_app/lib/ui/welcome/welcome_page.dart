@@ -80,6 +80,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               child: SizedBox(
                                 height: 44,
                                 child: RaisedButton(
+                                  elevation: 0,
                                   color: Color(0xffe1594b),
                                   shape: RoundedRectangleBorder(
                                     borderRadius:
@@ -104,6 +105,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               child: SizedBox(
                                 height: 44,
                                 child: RaisedButton(
+                                  elevation: 0,
                                   color: Color(0xff5eab9f),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
