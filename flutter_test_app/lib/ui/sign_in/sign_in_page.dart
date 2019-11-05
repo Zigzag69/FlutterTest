@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:redux/redux.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_test_app/redux/sign_in/sign_in_actions.dart';
+import 'package:flutter_test_app/ui/sign_in/sign_in_vm.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
-import 'package:flutter_test_app/redux/sign_up/sign_up_actions.dart';
-import 'package:flutter_test_app/ui/sign_up/sign_up_vm.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -41,32 +39,48 @@ class _SignInPageState extends State<SignInPage> {
     _emailFocusNode.dispose();
   }
 
-  _onInit(Store<AppState> store) {}
+  _onInit(Store<AppState> store) {
+    if (store.state.signInPageState.isDefault()) return;
+    store.dispatch(ResetState());
+  }
 
-  _onDispose(Store<AppState> store) {}
+  _onDispose(Store<AppState> store) {
+    if (store.state.signInPageState.isDefault()) return;
+    store.dispatch(ResetState());
+  }
 
-  _onWillChange(SignUpPageViewModel vm) {}
+  _onWillChange(SignInPageViewModel vm) {
+    if (vm.isDefault) return;
+    if (vm.email == '') return;
+    if (vm.password == '') return;
+    vm.resetState();
+    Navigator.of(context).pushNamed(
+        AppRoutes.home_page,
+    );
+  }
 
-  _onDidChange(SignUpPageViewModel vm) {}
+  _onDidChange(SignInPageViewModel vm) {
+    if (vm.isDefault) return;
+    if (vm.error == '') return;
+    vm.resetState();
+    String message;
+    if (vm.error is PlatformException) {
+      PlatformException pe = vm.error;
+      message = pe.message;
+    } else {
+      message = vm.error.toString();
+    }
+    _scaffoldKey.currentState.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text(message),
+      ),
+    );
+  }
 
   _goBack() {
     Navigator.of(context).pop();
-  }
-
-  Future<void> _signIn() async {
-    try {
-      FirebaseUser user = (await FirebaseAuth.instance
-              .signInWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text))
-          .user;
-      print("SUCCESS");
-      Navigator.of(context)
-          .pushNamed(AppRoutes.home_page);
-    } catch (error) {
-      print("ERROR");
-      print(error.toString());
-    }
   }
 
   @override
@@ -100,12 +114,12 @@ class _SignInPageState extends State<SignInPage> {
           ),
           body: StoreConnector(
             distinct: true,
-            converter: SignUpPageViewModel.fromStore,
+            converter: SignInPageViewModel.fromStore,
             onInit: _onInit,
             onDispose: _onDispose,
             onWillChange: _onWillChange,
             onDidChange: _onDidChange,
-            builder: (BuildContext context, SignUpPageViewModel vm) {
+            builder: (BuildContext context, SignInPageViewModel vm) {
               return Padding(
                 padding: const EdgeInsets.only(top: 0),
                 child: LayoutBuilder(
@@ -246,7 +260,7 @@ class _SignInPageState extends State<SignInPage> {
                                       ),
                                       onPressed: () {
                                         print("press");
-                                        _signIn();
+                                        vm.signIn(_emailController.text, _passwordController.text);
                                       },
                                     ),
                                   )),
