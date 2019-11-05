@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/home/home_actions.dart';
 import 'package:flutter_test_app/ui/home/home_vm.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -33,8 +34,13 @@ class _HomePageState extends State<HomePage> {
 
   _onDidChange(HomePageViewModel vm) {}
 
-  _goBack() {
-    Navigator.of(context).pop();
+  _logOut() async {
+    final sp = await SharedPreferences.getInstance();
+    await sp.clear();
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      AppRoutes.welcome_page,
+          (Route<dynamic> route) => false,
+    );
   }
 
   @override
@@ -111,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                       onPressed: () {
-                                        print("press");
+                                        _logOut();
                                       },
                                     ),
                                   )),

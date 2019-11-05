@@ -1,5 +1,6 @@
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
+import 'package:flutter_test_app/data/models/user.dart';
 import 'package:flutter_test_app/redux/base/app_reducer.dart';
 import 'package:flutter_test_app/redux/base/app_store.dart';
 import 'package:flutter_test_app/ui/home/home_page.dart';
@@ -13,10 +14,9 @@ import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 bool checkSession(SharedPreferences sharedPreferences) {
-  if (!sharedPreferences.containsKey(ShPr.session_token)) return false;
-  final sessionToken = sharedPreferences.getString(ShPr.session_token);
-  print('sessionToken: $sessionToken');
-  return sessionToken != null || sessionToken.isNotEmpty;
+  print(sharedPreferences.containsKey('user'));
+  if (sharedPreferences.containsKey('user')) return true;
+  return false;
 }
 
 void main() async {

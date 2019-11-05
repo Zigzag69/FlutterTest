@@ -6,6 +6,7 @@ import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:flutter_test_app/redux/sign_in/sign_in_actions.dart';
 import 'package:flutter_test_app/ui/sign_in/sign_in_vm.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -54,9 +55,16 @@ class _SignInPageState extends State<SignInPage> {
     if (vm.email == '') return;
     if (vm.password == '') return;
     vm.resetState();
+    _setUser();
+
     Navigator.of(context).pushNamed(
         AppRoutes.home_page,
     );
+  }
+
+  _setUser() async {
+    final sp = await SharedPreferences.getInstance();
+    await sp.setBool('user', true);
   }
 
   _onDidChange(SignInPageViewModel vm) {

@@ -5,8 +5,6 @@ import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/sign_up/sign_up_actions.dart';
 
 class SignUpMiddleware {
-  SignUpMiddleware();
-
   List<Middleware<AppState>> getMiddleware() {
     return <Middleware<AppState>>[
       TypedMiddleware<AppState, SignUp>(_signUp),
