@@ -259,7 +259,6 @@ class _SignInPageState extends State<SignInPage> {
                                         ),
                                       ),
                                       onPressed: () {
-                                        print("press");
                                         vm.signIn(_emailController.text, _passwordController.text);
                                       },
                                     ),

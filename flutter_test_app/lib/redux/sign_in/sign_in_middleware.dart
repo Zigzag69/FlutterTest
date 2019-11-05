@@ -14,12 +14,20 @@ class SignInMiddleware {
   }
 
   Future _signIn(
-      Store<AppState> store,
-      SignIn action,
-      NextDispatcher next,
-      ) async {
+    Store<AppState> store,
+    SignIn action,
+    NextDispatcher next,
+  ) async {
     next(action);
-    print("sign in");
-
+    try {
+      FirebaseUser user = (await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: action.email, password: action.password))
+          .user;
+      store.dispatch(ShowResult(action.email, action.password));
+    } catch (error) {
+      store.dispatch(ShowError(error));
+      print(error.toString());
+    }
   }
 }
