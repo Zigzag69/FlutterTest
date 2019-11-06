@@ -6,6 +6,7 @@ import 'package:flutter_test_app/redux/sign_up/sign_up_actions.dart';
 
 @immutable
 class SignUpPageViewModel extends Equatable {
+  final bool loading;
   final String email;
   final String password;
   final Object error;
@@ -13,16 +14,24 @@ class SignUpPageViewModel extends Equatable {
   final bool isDefault;
   final Function() resetState;
   SignUpPageViewModel({
+    this.loading,
     this.email,
     this.password,
     this.error,
     this.signUp,
     this.isDefault,
     this.resetState,
-  }) : super([email, password, error, isDefault]);
+  }) : super([
+          loading,
+          email,
+          password,
+          error,
+          isDefault,
+        ]);
 
   static SignUpPageViewModel fromStore(Store<AppState> store) {
     return SignUpPageViewModel(
+      loading: store.state.signUpPageState.isLoading,
       email: store.state.signUpPageState.email,
       password: store.state.signUpPageState.password,
       error: store.state.signUpPageState.error,

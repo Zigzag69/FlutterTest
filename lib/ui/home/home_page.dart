@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
     await sp.clear();
     Navigator.of(context).pushNamedAndRemoveUntil(
       AppRoutes.welcome_page,
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
   }
 

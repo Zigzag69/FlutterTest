@@ -7,11 +7,20 @@ class SignUpPageState extends Equatable {
   final String email;
   final String password;
   final Object error;
-  SignUpPageState({this.isLoading, this.email, this.password, this.error})
-      : super([isLoading, email, password, error]);
+  SignUpPageState({
+    this.isLoading,
+    this.email,
+    this.password,
+    this.error,
+  }) : super([isLoading, email, password, error]);
 
   factory SignUpPageState.initial() {
-    return SignUpPageState(isLoading: false, email: '', password: '', error: '');
+    return SignUpPageState(
+      isLoading: false,
+      email: '',
+      password: '',
+      error: '',
+    );
   }
 
   SignUpPageState copyWith({
