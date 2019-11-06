@@ -1,11 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_test_app/common/consts/keys.dart';
 import 'dart:async';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/sign_in/sign_in_actions.dart';
+import 'package:flutter_test_app/data/repo/auth_repo.dart';
 
 class SignInMiddleware {
+  final AuthRepo authRepo;
+  SignInMiddleware(this.authRepo);
+
   List<Middleware<AppState>> getMiddleware() {
     return <Middleware<AppState>>[
       TypedMiddleware<AppState, SignIn>(_signIn),
@@ -18,15 +20,11 @@ class SignInMiddleware {
     NextDispatcher next,
   ) async {
     next(action);
-    try {
-      FirebaseUser user = (await FirebaseAuth.instance
-              .signInWithEmailAndPassword(
-                  email: action.email, password: action.password))
-          .user;
+    authRepo.signIn(action.email, action.password).then((login) {
       store.dispatch(ShowResult(action.email, action.password));
-    } catch (error) {
+    }).catchError((error) {
+      print(error);
       store.dispatch(ShowError(error));
-      print(error.toString());
-    }
+    });
   }
 }

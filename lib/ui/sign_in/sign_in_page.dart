@@ -55,17 +55,10 @@ class _SignInPageState extends State<SignInPage> {
     if (vm.email == '') return;
     if (vm.password == '') return;
     vm.resetState();
-    _setUser();
-
     Navigator.of(context).pushNamedAndRemoveUntil(
       AppRoutes.home_page,
       (Route<dynamic> route) => false,
     );
-  }
-
-  _setUser() async {
-    final sp = await SharedPreferences.getInstance();
-    await sp.setBool('user', true);
   }
 
   _onDidChange(SignInPageViewModel vm) {
