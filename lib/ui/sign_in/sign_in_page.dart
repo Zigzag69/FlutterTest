@@ -111,7 +111,8 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     if (!Validator.isEmpty(password) &&
-        !Validator.isPasswordCorrect(password) && password.length >= 6) {
+        !Validator.isPasswordCorrect(password) &&
+        password.length >= 6) {
       setState(() => _passwordError = 'Incorrect password format.');
       validated = false;
     }

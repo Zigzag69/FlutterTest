@@ -6,6 +6,7 @@ import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/home/home_actions.dart';
 import 'package:flutter_test_app/ui/home/home_vm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,17 +14,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List _skills = new List();
+  List skillsData = ["Sketch", "Graphic design", "Web design", "Jira"];
   GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
   void initState() {
     super.initState();
     _scaffoldKey = GlobalKey<ScaffoldState>();
+    _addSkills();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  _addSkills() {
+    for (var i = 0; i < skillsData.length; i++) {
+      _skills.add(skillsData[i]);
+    }
   }
 
   _onInit(Store<AppState> store) {}
@@ -49,15 +59,9 @@ class _HomePageState extends State<HomePage> {
       children: [
         Positioned.fill(
           child: Container(
-            color: Colors.white,
+            color: Color(0xFF2a3035),
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                'assets/images/img_plane_bg.png',
-                width: MediaQuery.of(context).size.width,
-                height: 234,
-                fit: BoxFit.fitWidth,
-              ),
             ),
           ),
         ),
@@ -97,6 +101,58 @@ class _HomePageState extends State<HomePage> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: _skills.length,
+                                    itemBuilder:
+                                        (BuildContext ctxt, int index) {
+                                      return new Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Container(
+                                                height: 60,
+                                                color: Color(0xFF31373c),
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 12),
+                                                    child: Text(
+                                                      _skills[index],
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFFfffff8),
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 0),
+                                                child: IconButton(
+                                                  icon: SvgPicture.asset(
+                                                    'assets/images/ic_trash_white.svg',
+                                                    width: 44.0,
+                                                    height: 44.0,
+                                                  ),
+                                                  onPressed: () {},
+                                                ),
+                                              ),
+                                            ],
+                                          ));
+                                    }),
+                              ),
                               Padding(
                                   padding: const EdgeInsets.only(top: 24),
                                   child: SizedBox(
