@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_test_app/common/validator/validator.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -83,6 +84,40 @@ class _SignInPageState extends State<SignInPage> {
 
   _goBack() {
     Navigator.of(context).pop();
+  }
+
+  _validateFields(SignInPageViewModel vm) {
+    bool validated = true;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    if (Validator.isEmpty(email)) {
+      setState(() => _emailError = 'Email can’t be empty.');
+      validated = false;
+    }
+    if (!Validator.isEmpty(email) && !Validator.isEmailCorrect(email)) {
+      setState(() => _emailError = 'Incorrect email format.');
+      validated = false;
+    }
+
+    if (Validator.isEmpty(password)) {
+      setState(() => _passwordError = 'Password can’t be empty.');
+      validated = false;
+    }
+
+    if (password.length < 6) {
+      setState(
+          () => _passwordError = 'Password must be at least 6 symbols long');
+      validated = false;
+    }
+
+    if (!Validator.isEmpty(password) &&
+        !Validator.isPasswordCorrect(password) && password.length >= 6) {
+      setState(() => _passwordError = 'Incorrect password format.');
+      validated = false;
+    }
+
+    if (!validated) return;
+    vm.signIn(_emailController.text, _passwordController.text);
   }
 
   @override
@@ -193,7 +228,7 @@ class _SignInPageState extends State<SignInPage> {
                                       keyboardType: TextInputType.emailAddress,
                                       maxLines: 1,
                                       inputFormatters: [
-                                        LengthLimitingTextInputFormatter(256),
+                                        LengthLimitingTextInputFormatter(30),
                                       ],
                                       autocorrect: false,
                                       controller: _emailController,
@@ -272,8 +307,7 @@ class _SignInPageState extends State<SignInPage> {
                                               ),
                                             ),
                                             onPressed: () {
-                                              vm.signIn(_emailController.text,
-                                                  _passwordController.text);
+                                              _validateFields(vm);
                                             },
                                           ),
                                         )),
