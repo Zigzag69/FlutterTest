@@ -4,6 +4,7 @@ import 'package:flutter_test_app/data/models/user.dart';
 import 'package:flutter_test_app/redux/base/app_reducer.dart';
 import 'package:flutter_test_app/redux/base/app_store.dart';
 import 'package:flutter_test_app/ui/home/home_page.dart';
+import 'package:flutter_test_app/ui/item_details/item_details_page.dart';
 import 'package:flutter_test_app/ui/sign_in/sign_in_page.dart';
 import 'package:flutter_test_app/ui/sign_up/sign_up_page.dart';
 import 'package:redux/redux.dart';
@@ -68,6 +69,7 @@ class FlutterTestAppState extends State<FlutterTestApp> {
               AppRoutes.sign_in_page: (context) => SignInPage(),
               AppRoutes.sign_up_page: (context) => SignUpPage(),
               AppRoutes.home_page: (context) => HomePage(),
+              AppRoutes.item_details: (context) => ItemDetailsPage(),
             };
             final builder = routes[settings.name];
             return MaterialPageRoute(
