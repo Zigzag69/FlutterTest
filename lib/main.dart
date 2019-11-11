@@ -47,11 +47,9 @@ class FlutterTestApp extends StatefulWidget {
 }
 
 class FlutterTestAppState extends State<FlutterTestApp> {
-  var _navigatorKey;
 
   @override
   void initState() {
-    _navigatorKey = GlobalKey<NavigatorState>();
     super.initState();
   }
 
@@ -60,7 +58,6 @@ class FlutterTestAppState extends State<FlutterTestApp> {
     return StoreProvider<AppState>(
         store: widget.store,
         child: MaterialApp(
-          navigatorKey: _navigatorKey,
           debugShowCheckedModeBanner: false,
           home: widget.isSessionAvailable ? HomePage() : WelcomePage(),
           onGenerateRoute: (RouteSettings settings) {
