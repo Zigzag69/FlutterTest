@@ -90,11 +90,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   _checkInternet(HomePageViewModel vm) async {
-    final result = await InternetAddress.lookup('google.com');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      _userHaveInternet = true;
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        _userHaveInternet = true;
+      }
+    } on SocketException catch (_) {
+      _userHaveInternet = false;
     }
-    _userHaveInternet = false;
   }
 
   _showSnack() {
