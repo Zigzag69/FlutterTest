@@ -23,6 +23,10 @@ class _HomePageState extends State<HomePage> {
     "First Name",
     "Second Name",
     "Third Name",
+    "Fourth Name",
+    "Fifth Name",
+    "Sixth Name",
+    "Seventh Name",
   ];
   bool _userHaveInternet = false;
   GlobalKey<ScaffoldState> _scaffoldKey;
