@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:redux/redux.dart';
@@ -34,13 +35,43 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  _onInit(Store<AppState> store) {}
+  _onInit(Store<AppState> store) {
+    if (store.state.signInPageState.isDefault()) return;
+    store.dispatch(ResetState());
+  }
 
-  _onDispose(Store<AppState> store) {}
+  _onDispose(Store<AppState> store) {
+    if (store.state.signInPageState.isDefault()) return;
+    store.dispatch(ResetState());
+  }
 
-  _onWillChange(HomePageViewModel vm) {}
+  _onWillChange(HomePageViewModel vm) {
+    if (vm.isDefault) return;
+    vm.resetState();
+//    Navigator.of(context).pushNamed(
+//      AppRoutes.item_details,
+//    );
+  }
 
-  _onDidChange(HomePageViewModel vm) {}
+  _onDidChange(HomePageViewModel vm) {
+    if (vm.isDefault) return;
+    if (vm.error == '') return;
+    vm.resetState();
+    String message;
+    if (vm.error is PlatformException) {
+      PlatformException pe = vm.error;
+      message = pe.message;
+    } else {
+      message = vm.error.toString();
+    }
+    _scaffoldKey.currentState.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text(message),
+      ),
+    );
+  }
 
   _logOut() async {
     final sp = await SharedPreferences.getInstance();
@@ -52,7 +83,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildListView(
-      BuildContext context, DocumentSnapshot document, index) {
+    HomePageViewModel vm,
+    BuildContext context,
+    DocumentSnapshot document,
+    index,
+  ) {
     return new Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Row(
@@ -97,9 +132,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    AppRoutes.item_details,
-                  );
+                  print('tap item 2');
+//                  Navigator.of(context).pushNamed(
+//                    AppRoutes.item_details,
+//                  );
                 },
               ),
             ),
@@ -111,7 +147,12 @@ class _HomePageState extends State<HomePage> {
                   width: 44.0,
                   height: 44.0,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  print('tap trash');
+//                  document.reference.delete();
+//                document.reference.updateData({'names': 'jack'});
+                  vm.removeItem(document, "Jack");
+                },
               ),
             ),
           ],
@@ -141,68 +182,78 @@ class _HomePageState extends State<HomePage> {
             onWillChange: _onWillChange,
             onDidChange: _onDidChange,
             builder: (BuildContext context, HomePageViewModel vm) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 0),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints:
-                            BoxConstraints(minHeight: constraints.maxHeight),
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(24, 50, 24, 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Center(
-                                child: Text(
-                                  "Home Page",
-                                  style: TextStyle(
-                                      fontSize: 40,
-                                      color: Color(0xff5eab9f),
-                                      fontWeight: FontWeight.bold),
+              return vm.loading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SingleChildScrollView(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                  minHeight: constraints.maxHeight),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(24, 50, 24, 20),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Text(
+                                        "Home Page",
+                                        style: TextStyle(
+                                            fontSize: 40,
+                                            color: Color(0xff5eab9f),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('testItems')
+                                            .snapshots(),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData)
+                                            return const Center(
+                                              child: Text(
+                                                "Loading...",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Color(0xFFfffff8),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            );
+                                          return ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                              itemCount: snapshot
+                                                  .data.documents.length,
+                                              itemBuilder: (context, index) =>
+                                                  _buildListView(
+                                                      vm,
+                                                      context,
+                                                      snapshot.data
+                                                          .documents[index],
+                                                      index));
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: StreamBuilder(
-                                  stream: Firestore.instance
-                                      .collection('testItems')
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData)
-                                      return const Center(
-                                        child: Text(
-                                          "Loading...",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Color(0xFFfffff8),
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      );
-                                    return ListView.builder(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        shrinkWrap: true,
-                                        itemCount:
-                                            snapshot.data.documents.length,
-                                        itemBuilder: (context, index) =>
-                                            _buildListView(
-                                                context,
-                                                snapshot.data.documents[index],
-                                                index));
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
                     );
-                  },
-                ),
-              );
             },
           ),
           bottomNavigationBar: Container(

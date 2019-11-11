@@ -14,30 +14,20 @@ class ItemDetailsPage extends StatefulWidget {
 }
 
 class _ItemDetailsPageState extends State<ItemDetailsPage> {
-  List _skills = new List();
-  List skillsData = [
-    "Name",
-    "Surname",
-    "Years",
-  ];
+  //                  document.reference.updateData({
+//                    'names': _items[index],
+//                  });
   GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
   void initState() {
     super.initState();
     _scaffoldKey = GlobalKey<ScaffoldState>();
-    _addSkills();
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  _addSkills() {
-    for (var i = 0; i < skillsData.length; i++) {
-      _skills.add(skillsData[i]);
-    }
   }
 
   _onInit(Store<AppState> store) {}
@@ -52,82 +42,73 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
     Navigator.of(context).pop();
   }
 
-  Widget _listView(context, snapshot) {
-    return ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: snapshot.data.documents.length,
-        itemBuilder: (BuildContext context, int index) {
-          return new Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Container(
-                      height: 60,
-                      width: (MediaQuery.of(context).size.width - 116) / 2 - 5,
-                      color: Color(0xFF31373c),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: Text(
-                            _skills[index],
-                            style: TextStyle(
-                              color: Color(0xFFfffff8),
-                              fontSize: 16,
-                            ),
-                          ),
+  Widget _buildListView(
+      BuildContext context, DocumentSnapshot document, index) {
+    return new Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(
+          children: <Widget>[
+            Container(
+              height: 60,
+              width: (MediaQuery.of(context).size.width - 116) / 2 - 5,
+              color: Color(0xFF31373c),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    document['names'],
+                    style: TextStyle(
+                      color: Color(0xFFfffff8),
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: GestureDetector(
+                child: Container(
+                  height: 60,
+                  width: (MediaQuery.of(context).size.width - 116) / 2 - 5,
+                  color: Color(0xFF31373c),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        document['names'],
+                        style: TextStyle(
+                          color: Color(0xFFfffff8),
+                          fontSize: 16,
                         ),
                       ),
                     ),
-                    onTap: () {
-                      print("tap item 1");
-                    },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: GestureDetector(
-                      child: Container(
-                        height: 60,
-                        width:
-                        (MediaQuery.of(context).size.width - 116) / 2 - 5,
-                        color: Color(0xFF31373c),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: Text(
-//                              snapshot.data.documents[index],
-                              "2",
-                              style: TextStyle(
-                                color: Color(0xFFfffff8),
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        print("tap item 2");
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: IconButton(
-                      icon: SvgPicture.asset(
-                        'assets/images/ic_trash_white.svg',
-                        width: 44.0,
-                        height: 44.0,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              ));
-        });
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.item_details,
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: IconButton(
+                icon: SvgPicture.asset(
+                  'assets/images/ic_trash_white.svg',
+                  width: 44.0,
+                  height: 44.0,
+                ),
+                onPressed: () {
+//                  document.reference.delete();
+                },
+              ),
+            ),
+          ],
+        ));
   }
 
   @override
@@ -200,7 +181,18 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                       );
-                                    return _listView(context, snapshot);
+                                    return ListView.builder(
+                                        physics:
+                                        const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount:
+                                        snapshot.data.documents.length,
+                                        itemBuilder: (context, index) =>
+                                            _buildListView(
+                                                context,
+                                                snapshot.data.documents[index],
+                                                index));
                                   },
                                 ),
                               ),
