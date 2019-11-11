@@ -2,7 +2,7 @@ import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/item_details/item_details_actions.dart';
 import 'package:flutter_test_app/redux/item_details/item_details_state.dart';
 
-Reducer<ItemDetailsState> homePageReducer = combineReducers<ItemDetailsState>([
+Reducer<ItemDetailsState> itemDetailsReducer = combineReducers<ItemDetailsState>([
   TypedReducer<ItemDetailsState, UpdateItem>(_updateItem),
   TypedReducer<ItemDetailsState, ShowError>(_showError),
   TypedReducer<ItemDetailsState, ResetState>(_resetState),

@@ -78,7 +78,14 @@ class _SignUpPageState extends State<SignUpPage> {
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
         duration: Duration(seconds: 2),
-        content: Text(message),
+        content: Text(
+          message,
+          style: TextStyle(
+            fontSize: 10,
+            color: Color(0xff5eab9f),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

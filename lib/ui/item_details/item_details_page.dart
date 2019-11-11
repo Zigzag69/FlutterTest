@@ -53,7 +53,7 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
   _onWillChange(ItemDetailsViewModel vm) {
     if (vm.isDefault) return;
     vm.resetState();
-    print("test docent");
+    Navigator.of(context).pop();
   }
 
   _onDidChange(ItemDetailsViewModel vm) {
@@ -71,7 +71,14 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
         duration: Duration(seconds: 2),
-        content: Text(message),
+        content: Text(
+          message,
+          style: TextStyle(
+            fontSize: 10,
+            color: Color(0xff5eab9f),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -85,19 +92,24 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
         padding: const EdgeInsets.only(top: 10),
         child: Row(
           children: <Widget>[
-            Container(
-              height: 60,
-              width: (MediaQuery.of(context).size.width) / 2 - 30,
-              color: Color(0xFF31373c),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                    widget.args.document['names'],
-                    style: TextStyle(
-                      color: Color(0xFFfffff8),
-                      fontSize: 16,
+            GestureDetector(
+              onTap:() {
+                vm.updateItem(widget.args.document, _itemController.text);
+              },
+              child: Container(
+                height: 60,
+                width: (MediaQuery.of(context).size.width) / 2 - 30,
+                color: Color(0xFF31373c),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text(
+                      widget.args.document['names'],
+                      style: TextStyle(
+                        color: Color(0xFFfffff8),
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
@@ -238,9 +250,8 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: () {
-//                    ItemDetailsViewModel()
-//                        .updateItem(widget.args.document, _itemController.text);
-                    widget.args.document.reference.updateData({'names': _itemController.text});
+                    ItemDetailsViewModel()
+                        .updateItem(widget.args.document, _itemController.text);
                   },
                   child: Container(
                     height: 44,

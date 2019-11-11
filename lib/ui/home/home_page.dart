@@ -11,6 +11,7 @@ import 'package:flutter_test_app/ui/home/home_vm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     "Second Name",
     "Third Name",
   ];
+  bool _userHaveInternet = false;
   GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
@@ -66,7 +68,14 @@ class _HomePageState extends State<HomePage> {
     _scaffoldKey.currentState.showSnackBar(
       SnackBar(
         duration: Duration(seconds: 2),
-        content: Text(message),
+        content: Text(
+          message,
+          style: TextStyle(
+            fontSize: 10,
+            color: Color(0xff5eab9f),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -77,6 +86,31 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pushNamedAndRemoveUntil(
       AppRoutes.welcome_page,
       (Route<dynamic> route) => false,
+    );
+  }
+
+  _checkInternet(HomePageViewModel vm) async {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      _userHaveInternet = true;
+    }
+    _userHaveInternet = false;
+  }
+
+  _showSnack() {
+    _scaffoldKey.currentState.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text(
+          "Something went wrong. Check your internet connection and try again",
+          style: TextStyle(
+            fontSize: 10,
+            color: Color(0xff5eab9f),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 
@@ -146,7 +180,12 @@ class _HomePageState extends State<HomePage> {
                   height: 44.0,
                 ),
                 onPressed: () {
-                  vm.removeItem(document);
+                  _checkInternet(vm);
+                  if (_userHaveInternet) {
+                    vm.removeItem(document);
+                  } else {
+                    _showSnack();
+                  }
                 },
               ),
             ),
@@ -201,9 +240,10 @@ class _HomePageState extends State<HomePage> {
                                       child: Text(
                                         "Home Page",
                                         style: TextStyle(
-                                            fontSize: 40,
-                                            color: Color(0xff5eab9f),
-                                            fontWeight: FontWeight.bold),
+                                          fontSize: 40,
+                                          color: Color(0xff5eab9f),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                     Padding(
