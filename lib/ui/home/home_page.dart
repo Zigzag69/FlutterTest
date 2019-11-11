@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
+import 'package:flutter_test_app/ui/item_details/item_details_page.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/home/home_actions.dart';
@@ -48,9 +49,6 @@ class _HomePageState extends State<HomePage> {
   _onWillChange(HomePageViewModel vm) {
     if (vm.isDefault) return;
     vm.resetState();
-//    Navigator.of(context).pushNamed(
-//      AppRoutes.item_details,
-//    );
   }
 
   _onDidChange(HomePageViewModel vm) {
@@ -132,10 +130,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                  print('tap item 2');
-//                  Navigator.of(context).pushNamed(
-//                    AppRoutes.item_details,
-//                  );
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.item_details,
+                    arguments: ItemDetailsArgs(document),
+                  );
                 },
               ),
             ),
@@ -148,10 +146,7 @@ class _HomePageState extends State<HomePage> {
                   height: 44.0,
                 ),
                 onPressed: () {
-                  print('tap trash');
-//                  document.reference.delete();
-//                document.reference.updateData({'names': 'jack'});
-                  vm.removeItem(document, "Jack");
+                  vm.removeItem(document);
                 },
               ),
             ),

@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ResetState {}
 
-
 class RemoveItem {
-    final DocumentSnapshot document;
-    final String newName;
+  final DocumentSnapshot document;
 
-  RemoveItem(this.document, this.newName);
+  RemoveItem(this.document);
 }
 
 class ShowResult {}

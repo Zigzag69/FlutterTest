@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class HomePageViewModel extends Equatable {
   final bool loading;
   final Object error;
-  final Function(DocumentSnapshot document, String newName) removeItem;
+  final Function(DocumentSnapshot document) removeItem;
   final bool isDefault;
   final Function() resetState;
   HomePageViewModel({
@@ -28,7 +28,7 @@ class HomePageViewModel extends Equatable {
     return HomePageViewModel(
       loading: store.state.homePageState.isLoading,
       error: store.state.homePageState.error,
-      removeItem: (document, newName) => store.dispatch(RemoveItem(document, newName)),
+      removeItem: (document) => store.dispatch(RemoveItem(document)),
       isDefault: store.state.homePageState.isLoading,
       resetState: () => store.dispatch(ResetState()),
     );

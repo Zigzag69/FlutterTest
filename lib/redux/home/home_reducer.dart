@@ -18,7 +18,7 @@ HomePageState _removeItem(HomePageState state, RemoveItem action) {
 
 HomePageState _showResult(HomePageState state, ShowResult action) {
   return state.copyWith(
-      isLoading: false,
+    isLoading: false,
   );
 }
 

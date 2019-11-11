@@ -69,7 +69,7 @@ class FlutterTestAppState extends State<FlutterTestApp> {
               AppRoutes.sign_in_page: (context) => SignInPage(),
               AppRoutes.sign_up_page: (context) => SignUpPage(),
               AppRoutes.home_page: (context) => HomePage(),
-              AppRoutes.item_details: (context) => ItemDetailsPage(),
+              AppRoutes.item_details: (context) => ItemDetailsPage(settings.arguments),
             };
             final builder = routes[settings.name];
             return MaterialPageRoute(
