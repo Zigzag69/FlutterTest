@@ -37,10 +37,10 @@ class HomeMiddleware {
       ) async {
     next(action);
     await authRepo.getUsers().then((result) {
-      print("SUCESS ${result}");
+      print("SUCCESS ${result}");
       store.dispatch(ShowResult());
     }).catchError((error) {
-      print(error);
+      print("ERROR ${error}");
       store.dispatch(ShowError(error));
     });
   }

@@ -6,9 +6,7 @@ String userToJson(User data) => json.encode(data.toJson());
 
 abstract class ListUsers {}
 
-abstract class Users implements ListUsers {}
-
-class User implements Users {
+class User implements ListUsers {
   String firstName;
   String lastName;
   int age;

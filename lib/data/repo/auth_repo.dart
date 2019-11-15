@@ -5,10 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthRepo {
-
-
-  Future<List<User>> getUsers() async {
-//    bool network = false;
+  Future<List<ListUsers>> getUsers() async {
+    try {
+      //    bool network = false;
 //    if (!network) {
 //      throw PlatformException(
 //        code: "Test error code",
@@ -16,17 +15,15 @@ class AuthRepo {
 //      );
 //    }
 
-    try {
-      final firestore = Firestore.instance;
-      QuerySnapshot querySnapshot = await firestore.collection("users").getDocuments();
-      List<dynamic> users = querySnapshot.documents;
-
-//      final User user = User.fromJson(users);
-
-      print("USER = ${users}");
-     return users;
+      QuerySnapshot querySnapshot = await Firestore.instance.collection("users").getDocuments();
+      List<DocumentSnapshot> users = querySnapshot.documents;
+      List<ListUsers> usersList = List();
+      users.forEach((item) {
+        usersList.add(User.fromJson(item.data));
+      });
+      print("DOCENT LISTUSERS ${User}");
+     return usersList;
     } catch (error) {
-      print("ERROR");
       throw error.toString();
     }
   }
