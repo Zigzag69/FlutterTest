@@ -21,7 +21,7 @@ class ItemDetailsMiddleware {
       NextDispatcher next,
       ) async {
     next(action);
-    authRepo.updateData(action.document, action.newName).then((result) {
+   await authRepo.updateData(action.document, action.newName).then((result) {
       store.dispatch(ShowResult());
     }).catchError((error) {
       print(error);

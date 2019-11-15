@@ -1,12 +1,48 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_test_app/data/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthRepo {
+
+
+  Future<List<User>> getUsers() async {
+//    bool network = false;
+//    if (!network) {
+//      throw PlatformException(
+//        code: "Test error code",
+//        message: "Test error message",
+//      );
+//    }
+
+    try {
+      final firestore = Firestore.instance;
+      QuerySnapshot querySnapshot = await firestore.collection("users").getDocuments();
+      List<dynamic> users = querySnapshot.documents;
+
+//      final User user = User.fromJson(users);
+
+      print("USER = ${users}");
+     return users;
+    } catch (error) {
+      print("ERROR");
+      throw error.toString();
+    }
+  }
+
   Future<void> signIn(
     String email,
     String password,
   ) async {
+    //    bool network = false;
+//    if (!network) {
+//      throw PlatformException(
+//        code: "Test error code",
+//        message: "Test error message",
+//      );
+//    }
+
     try {
       final AuthResult authResult =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -26,6 +62,14 @@ class AuthRepo {
     String email,
     String password,
   ) async {
+    //    bool network = false;
+//    if (!network) {
+//      throw PlatformException(
+//        code: "Test error code",
+//        message: "Test error message",
+//      );
+//    }
+
     try {
       final AuthResult authResult =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -42,10 +86,10 @@ class AuthRepo {
   }
 
   Future<void> deleteData(
-      DocumentSnapshot document,
-      ) async {
+    DocumentSnapshot document,
+  ) async {
     try {
-      document.reference.delete();
+      await document.reference.delete();
     } catch (error) {
       throw error.toString();
     }
@@ -56,7 +100,7 @@ class AuthRepo {
     String newName,
   ) async {
     try {
-      document.reference.updateData({'names': newName});
+      await document.reference.updateData({'names': newName});
     } catch (error) {
       throw error.toString();
     }

@@ -8,6 +8,8 @@ class RemoveItem {
   RemoveItem(this.document);
 }
 
+class GetUsers {}
+
 class ShowResult {}
 
 class ShowError {

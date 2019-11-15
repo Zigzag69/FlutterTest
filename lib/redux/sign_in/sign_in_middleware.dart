@@ -20,7 +20,7 @@ class SignInMiddleware {
     NextDispatcher next,
   ) async {
     next(action);
-    authRepo.signIn(action.email, action.password).then((login) {
+    await authRepo.signIn(action.email, action.password).then((login) {
       store.dispatch(ShowResult(action.email, action.password));
     }).catchError((error) {
       print(error);

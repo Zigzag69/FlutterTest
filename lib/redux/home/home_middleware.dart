@@ -12,16 +12,32 @@ class HomeMiddleware {
   List<Middleware<AppState>> getMiddleware() {
     return <Middleware<AppState>>[
       TypedMiddleware<AppState, RemoveItem>(_removeItem),
+      TypedMiddleware<AppState, GetUsers>(_getUsers),
     ];
   }
 
   Future _removeItem(
-    Store<AppState> store,
-    RemoveItem action,
-    NextDispatcher next,
-  ) async {
+      Store<AppState> store,
+      RemoveItem action,
+      NextDispatcher next,
+      ) async {
     next(action);
-    authRepo.deleteData(action.document).then((result) {
+    await authRepo.deleteData(action.document).then((result) {
+      store.dispatch(ShowResult());
+    }).catchError((error) {
+      print(error);
+      store.dispatch(ShowError(error));
+    });
+  }
+
+  Future _getUsers(
+      Store<AppState> store,
+      GetUsers action,
+      NextDispatcher next,
+      ) async {
+    next(action);
+    await authRepo.getUsers().then((result) {
+      print("SUCESS ${result}");
       store.dispatch(ShowResult());
     }).catchError((error) {
       print(error);

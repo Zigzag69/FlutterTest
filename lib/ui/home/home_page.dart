@@ -19,15 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List _items = [
-    "First Name",
-    "Second Name",
-    "Third Name",
-    "Fourth Name",
-    "Fifth Name",
-    "Sixth Name",
-    "Seventh Name",
-  ];
   bool _userHaveInternet = false;
   GlobalKey<ScaffoldState> _scaffoldKey;
 
@@ -131,23 +122,28 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.only(top: 10),
         child: Row(
           children: <Widget>[
-            Container(
-              height: 60,
-              width: (MediaQuery.of(context).size.width - 116) / 3 - 5,
-              color: Color(0xFF31373c),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                    document['firstName'],
-                    style: TextStyle(
-                      color: Color(0xFFfffff8),
-                      fontSize: 16,
+            GestureDetector(
+              child: Container(
+                height: 60,
+                width: (MediaQuery.of(context).size.width - 116) / 3 - 5,
+                color: Color(0xFF31373c),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text(
+                      document['firstName'],
+                      style: TextStyle(
+                        color: Color(0xFFfffff8),
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
               ),
+              onTap: () {
+                vm.getUsers();
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10),
@@ -171,10 +167,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    AppRoutes.item_details,
-                    arguments: ItemDetailsArgs(document),
-                  );
+                  vm.getUsers();
+//                  Navigator.of(context).pushNamed(
+//                    AppRoutes.item_details,
+//                    arguments: ItemDetailsArgs(document),
+//                  );
                 },
               ),
             ),
@@ -200,10 +197,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed(
-                    AppRoutes.item_details,
-                    arguments: ItemDetailsArgs(document),
-                  );
+                  vm.getUsers();
+//                  Navigator.of(context).pushNamed(
+//                    AppRoutes.item_details,
+//                    arguments: ItemDetailsArgs(document),
+//                  );
                 },
               ),
             ),

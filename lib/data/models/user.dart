@@ -1,5 +1,35 @@
-import 'package:equatable/equatable.dart';
+import 'dart:convert';
 
-class User extends Equatable {
-  User() : super([]);
+User userFromJson(String str) => User.fromJson(json.decode(str));
+
+String userToJson(User data) => json.encode(data.toJson());
+
+abstract class ListUsers {}
+
+abstract class Users implements ListUsers {}
+
+class User implements Users {
+  String firstName;
+  String lastName;
+  int age;
+
+  User({
+    this.firstName,
+    this.lastName,
+    this.age,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      age: json["age"],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "firstName": firstName,
+    "lastName": lastName,
+    "age": age,
+  };
 }
