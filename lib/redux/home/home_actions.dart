@@ -8,6 +8,8 @@ class RemoveItem {
   RemoveItem(this.document);
 }
 
+class CreateUsers {}
+
 class GetUsers {}
 
 class ShowResult {}

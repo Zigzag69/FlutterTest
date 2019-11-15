@@ -187,8 +187,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
-//                        document['age'],
-                      "age",
+                        document['age'].toString(),
                         style: TextStyle(
                           color: Color(0xFFfffff8),
                           fontSize: 16,
@@ -282,7 +281,40 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 20),
+                                      padding: const EdgeInsets.only(top: 30.0),
+                                      child: Container(
+                                          height: 84,
+                                          color: Color(0xFF2a3035),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10,
+                                                bottom: 30,
+                                                right: 24,
+                                                left: 24),
+                                            child: RaisedButton(
+                                              color: Color(0xffe1594b),
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      new BorderRadius.circular(
+                                                          22.0),
+                                                  side: BorderSide(
+                                                      color: Colors.white)),
+                                              child: Text(
+                                                'create 10 users',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                vm.createUsers();
+                                              },
+                                            ),
+                                          )),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 0),
                                       child: StreamBuilder(
                                         stream: Firestore.instance
                                             .collection('users')

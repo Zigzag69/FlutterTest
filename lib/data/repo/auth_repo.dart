@@ -15,14 +15,15 @@ class AuthRepo {
 //      );
 //    }
 
-      QuerySnapshot querySnapshot = await Firestore.instance.collection("users").getDocuments();
+      QuerySnapshot querySnapshot =
+          await Firestore.instance.collection("users").getDocuments();
       List<DocumentSnapshot> users = querySnapshot.documents;
       List<ListUsers> usersList = List();
       users.forEach((item) {
         usersList.add(User.fromJson(item.data));
       });
       print("DOCENT LISTUSERS ${User}");
-     return usersList;
+      return usersList;
     } catch (error) {
       throw error.toString();
     }
@@ -50,6 +51,24 @@ class AuthRepo {
       final sp = await SharedPreferences.getInstance();
       await sp.setBool('user', true);
       return user;
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<void> createUsers(
+    String firstName,
+    String lastName,
+    int age,
+  ) async {
+    try {
+      Firestore.instance
+          .collection("users").document()
+          .setData({
+        'firstName': firstName,
+        'lastName': lastName,
+        'age': age,
+      });
     } catch (error) {
       throw error.toString();
     }

@@ -13,6 +13,7 @@ class HomePageViewModel extends Equatable {
   final bool isDefault;
   final Function() resetState;
   final Function() getUsers;
+  final Function() createUsers;
   HomePageViewModel({
     this.loading,
     this.error,
@@ -20,6 +21,7 @@ class HomePageViewModel extends Equatable {
     this.isDefault,
     this.resetState,
     this.getUsers,
+    this.createUsers,
   }) : super([
           loading,
           error,
@@ -32,6 +34,7 @@ class HomePageViewModel extends Equatable {
       error: store.state.homePageState.error,
       removeItem: (document) => store.dispatch(RemoveItem(document)),
       getUsers: () => store.dispatch(GetUsers()),
+      createUsers: () => store.dispatch(CreateUsers()),
       isDefault: store.state.homePageState.isLoading,
       resetState: () => store.dispatch(ResetState()),
     );
