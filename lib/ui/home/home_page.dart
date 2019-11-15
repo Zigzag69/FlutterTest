@@ -133,14 +133,14 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             Container(
               height: 60,
-              width: (MediaQuery.of(context).size.width - 116) / 2 - 5,
+              width: (MediaQuery.of(context).size.width - 116) / 3 - 5,
               color: Color(0xFF31373c),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12),
                   child: Text(
-                    _items[index],
+                    document['firstName'],
                     style: TextStyle(
                       color: Color(0xFFfffff8),
                       fontSize: 16,
@@ -154,14 +154,43 @@ class _HomePageState extends State<HomePage> {
               child: GestureDetector(
                 child: Container(
                   height: 60,
-                  width: (MediaQuery.of(context).size.width - 116) / 2 - 5,
+                  width: (MediaQuery.of(context).size.width - 116) / 3 - 5,
                   color: Color(0xFF31373c),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
-                        document['names'],
+                        document['lastName'],
+                        style: TextStyle(
+                          color: Color(0xFFfffff8),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.item_details,
+                    arguments: ItemDetailsArgs(document),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: GestureDetector(
+                child: Container(
+                  height: 60,
+                  width: (MediaQuery.of(context).size.width - 116) / 3 - 5,
+                  color: Color(0xFF31373c),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        document['age'],
                         style: TextStyle(
                           color: Color(0xFFfffff8),
                           fontSize: 16,
@@ -257,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                                       padding: const EdgeInsets.only(top: 20),
                                       child: StreamBuilder(
                                         stream: Firestore.instance
-                                            .collection('testItems')
+                                            .collection('users')
                                             .snapshots(),
                                         builder: (context, snapshot) {
                                           if (!snapshot.hasData)

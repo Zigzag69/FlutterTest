@@ -321,7 +321,7 @@ class _SignInPageState extends State<SignInPage> {
                                         )),
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).pushNamed(
+                                        Navigator.of(context).pushReplacementNamed(
                                           AppRoutes.sign_up_page,
                                         );
                                       },
