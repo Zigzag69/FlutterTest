@@ -19,7 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _userHaveInternet = false;
   GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
@@ -81,34 +80,6 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pushNamedAndRemoveUntil(
       AppRoutes.welcome_page,
       (Route<dynamic> route) => false,
-    );
-  }
-
-  _checkInternet(HomePageViewModel vm) async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        _userHaveInternet = true;
-      }
-    } on SocketException catch (_) {
-      _userHaveInternet = false;
-    }
-  }
-
-  _showSnack() {
-    _scaffoldKey.currentState.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text(
-          "Something went wrong. Check your internet connection and try again",
-          style: TextStyle(
-            fontSize: 10,
-            color: Color(0xff5eab9f),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
     );
   }
 
@@ -214,12 +185,7 @@ class _HomePageState extends State<HomePage> {
                   height: 44.0,
                 ),
                 onPressed: () {
-                  _checkInternet(vm);
-                  if (_userHaveInternet) {
-                    vm.removeItem(document);
-                  } else {
-                    _showSnack();
-                  }
+                  vm.removeItem(document);
                 },
               ),
             ),

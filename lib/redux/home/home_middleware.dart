@@ -42,10 +42,8 @@ class HomeMiddleware {
   ) async {
     next(action);
     await authRepo.getUsers().then((result) {
-      print("SUCCESS ${result}");
       store.dispatch(ShowResult());
     }).catchError((error) {
-      print("ERROR ${error}");
       store.dispatch(ShowError(error));
     });
   }
@@ -63,7 +61,7 @@ class HomeMiddleware {
       await authRepo.createUsers(randomFirstName, randomLastName, randomAge).then((result) {
         store.dispatch(ShowResult());
       }).catchError((error) {
-        print(error);
+        print("test error home $error");
         store.dispatch(ShowError(error));
       });
     }
