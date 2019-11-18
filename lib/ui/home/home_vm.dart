@@ -15,7 +15,7 @@ class HomePageViewModel extends Equatable {
   final Function() resetState;
   final Function() getUsers;
   final Function() createUsers;
-  List<ListUsers> users;
+  List<User> users;
   HomePageViewModel(
       {this.loading,
       this.error,

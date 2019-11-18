@@ -11,7 +11,7 @@ class AuthRepo {
   String messageNetworkError =
       "Something went wrong. Please check your internet and try again";
 
-  Future<List<ListUsers>> getUsers() async {
+  Future<List<User>> getUsers() async {
     try {
 //      Future.delayed(Duration(seconds: 2));
 //      var result = await Connectivity().checkConnectivity();
@@ -25,7 +25,7 @@ class AuthRepo {
       QuerySnapshot querySnapshot =
           await Firestore.instance.collection("users").getDocuments();
       List<DocumentSnapshot> users = querySnapshot.documents;
-      List<ListUsers> usersList = List();
+      List<User> usersList = List();
       users.forEach((item) {
         usersList.add(User.fromJson(item.data));
       });

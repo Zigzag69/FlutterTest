@@ -27,17 +27,12 @@ class _HomePageState extends State<HomePage> {
     _scaffoldKey = GlobalKey<ScaffoldState>();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   _onInit(Store<AppState> store) {
     store.dispatch(GetUsers());
   }
 
   _onDispose(Store<AppState> store) {
-    if (store.state.signInPageState.isDefault()) return;
+    if (store.state.homePageState.isDefault()) return;
     store.dispatch(ResetState());
   }
 

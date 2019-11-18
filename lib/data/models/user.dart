@@ -4,9 +4,7 @@ User userFromJson(String str) => User.fromJson(json.decode(str));
 
 String userToJson(User data) => json.encode(data.toJson());
 
-abstract class ListUsers {}
-
-class User implements ListUsers {
+class User {
   String firstName;
   String lastName;
   int age;
@@ -30,4 +28,9 @@ class User implements ListUsers {
     "lastName": lastName,
     "age": age,
   };
+
+  @override
+  String toString() {
+    return 'User[firstName: $firstName, lastName: $lastName, age: $age]';
+  }
 }

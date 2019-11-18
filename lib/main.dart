@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:flutter_test_app/data/models/user.dart';
@@ -47,12 +48,6 @@ class FlutterTestApp extends StatefulWidget {
 }
 
 class FlutterTestAppState extends State<FlutterTestApp> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(
@@ -66,7 +61,8 @@ class FlutterTestAppState extends State<FlutterTestApp> {
               AppRoutes.sign_in_page: (context) => SignInPage(),
               AppRoutes.sign_up_page: (context) => SignUpPage(),
               AppRoutes.home_page: (context) => HomePage(),
-              AppRoutes.item_details: (context) => ItemDetailsPage(settings.arguments),
+              AppRoutes.item_details: (context) =>
+                  ItemDetailsPage(settings.arguments),
             };
             final builder = routes[settings.name];
             return MaterialPageRoute(

@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 class HomePageState extends Equatable {
   final bool isLoading;
   final Object error;
-  final List<ListUsers> users;
+  final List<User> users;
   HomePageState({
     this.isLoading,
     this.error,
@@ -28,7 +28,7 @@ class HomePageState extends Equatable {
   HomePageState copyWith({
     bool isLoading,
     Object error,
-    List<ListUsers> users,
+    List<User> users,
   }) {
     return HomePageState(
       isLoading: isLoading ?? this.isLoading,

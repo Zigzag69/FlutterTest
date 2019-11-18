@@ -16,7 +16,7 @@ class GetUsers {}
 class ShowResult {}
 
 class ShowUsersAction {
-  List<ListUsers> usersList;
+  List<User> usersList;
 
   ShowUsersAction(this.usersList);
 }

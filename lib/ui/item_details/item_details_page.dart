@@ -19,6 +19,7 @@ class ItemDetailsArgs {
 class ItemDetailsPage extends StatefulWidget {
   final ItemDetailsArgs args;
   ItemDetailsPage(this.args);
+
   @override
   _ItemDetailsPageState createState() => _ItemDetailsPageState();
 }
@@ -93,7 +94,7 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
         child: Row(
           children: <Widget>[
             GestureDetector(
-              onTap:() {
+              onTap: () {
                 vm.updateItem(widget.args.document, _itemController.text);
               },
               child: Container(
