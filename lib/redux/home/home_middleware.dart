@@ -54,14 +54,16 @@ class HomeMiddleware {
     NextDispatcher next,
   ) async {
     next(action);
-    for(var i = 0; i < 10; i++) {
+//    for(var i = 0; i < 10; i++) {
+//    for(var i = 0; i < 2; i++) { // PlatformException is worked
+    for(var i = 0; i < 1; i++) { // PlatformException is not worked
       var randomFirstName = randomString(5);
       var randomLastName = randomString(5);
       var randomAge = randomBetween(5, 100);
       await authRepo.createUsers(randomFirstName, randomLastName, randomAge).then((result) {
         store.dispatch(ShowResult());
       }).catchError((error) {
-        print("test error home $error");
+        print(error);
         store.dispatch(ShowError(error));
       });
     }

@@ -33,8 +33,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _onInit(Store<AppState> store) {
-    if (store.state.signInPageState.isDefault()) return;
-    store.dispatch(ResetState());
+    store.dispatch(GetUsers());
   }
 
   _onDispose(Store<AppState> store) {
@@ -193,6 +192,144 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
+  Widget _errorWidget(String errorText) {
+    return Padding(
+      padding: EdgeInsets.all(36),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            errorText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'poppins_medium',
+              fontSize: 16,
+              letterSpacing: 1.2,
+              color: Colors.white,
+            ),
+          ),
+          RaisedButton(
+            color: Color(0xffBD10E0),
+            elevation: 0,
+            highlightElevation: 0,
+            padding: EdgeInsets.only(top: 18, bottom: 19),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+            child: Text(
+              'Try again',
+              style: TextStyle(
+                fontFamily: 'poppins_medium',
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              print("tap");
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _loaderWidget() {
+    return new Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildBody(HomePageViewModel vm) {
+    return new Padding(
+      padding: const EdgeInsets.only(top: 0),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(24, 50, 24, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Center(
+                      child: Text(
+                        "Home Page",
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: Color(0xff5eab9f),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Container(
+                          height: 84,
+                          color: Color(0xFF2a3035),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10, bottom: 30, right: 24, left: 24),
+                            child: RaisedButton(
+                              color: Color(0xffe1594b),
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(22.0),
+                                  side: BorderSide(color: Colors.white)),
+                              child: Text(
+                                'create 10 users',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                vm.createUsers();
+                              },
+                            ),
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: StreamBuilder(
+                        stream:
+                            Firestore.instance.collection('users').snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return const Center(
+                              child: Text(
+                                "Loading...",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Color(0xFFfffff8),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            );
+                          return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context, index) => _buildListView(
+                                  vm,
+                                  context,
+                                  snapshot.data.documents[index],
+                                  index));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -217,111 +354,8 @@ class _HomePageState extends State<HomePage> {
             onDidChange: _onDidChange,
             builder: (BuildContext context, HomePageViewModel vm) {
               return vm.loading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(top: 0),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return SingleChildScrollView(
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minHeight: constraints.maxHeight),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(24, 50, 24, 20),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    Center(
-                                      child: Text(
-                                        "Home Page",
-                                        style: TextStyle(
-                                          fontSize: 40,
-                                          color: Color(0xff5eab9f),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 30.0),
-                                      child: Container(
-                                          height: 84,
-                                          color: Color(0xFF2a3035),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10,
-                                                bottom: 30,
-                                                right: 24,
-                                                left: 24),
-                                            child: RaisedButton(
-                                              color: Color(0xffe1594b),
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      new BorderRadius.circular(
-                                                          22.0),
-                                                  side: BorderSide(
-                                                      color: Colors.white)),
-                                              child: Text(
-                                                'create 10 users',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                vm.createUsers();
-                                              },
-                                            ),
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 0),
-                                      child: StreamBuilder(
-                                        stream: Firestore.instance
-                                            .collection('users')
-                                            .snapshots(),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData)
-                                            return const Center(
-                                              child: Text(
-                                                "Loading...",
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Color(0xFFfffff8),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            );
-                                          return ListView.builder(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              scrollDirection: Axis.vertical,
-                                              shrinkWrap: true,
-                                              itemCount: snapshot
-                                                  .data.documents.length,
-                                              itemBuilder: (context, index) =>
-                                                  _buildListView(
-                                                      vm,
-                                                      context,
-                                                      snapshot.data
-                                                          .documents[index],
-                                                      index));
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                  ? _loaderWidget() : _buildBody(vm);
+//                  : vm.error != '' && vm.error is PlatformException ? _errorWidget("test") : _buildBody(vm);
             },
           ),
           bottomNavigationBar: Container(
