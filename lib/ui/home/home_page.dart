@@ -241,6 +241,84 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildTitle() {
+    return Center(
+      child: Text(
+        "Home Page",
+        style: TextStyle(
+          fontSize: 40,
+          color: Color(0xff5eab9f),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtonCreateUsers() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+          height: 84,
+          color: Color(0xFF2a3035),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
+            child: RaisedButton(
+              color: Color(0xffe1594b),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(22.0),
+                  side: BorderSide(color: Colors.white)),
+              child: Text(
+                'create 10 users',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                print("create 10 users");
+              },
+            ),
+          )),
+    );
+  }
+
+  Widget _buildUsers(HomePageViewModel vm) {
+    print("DOCENT USERS = ${vm.users}");
+    return SizedBox();
+  }
+
+  Widget _buildButtonLogOut() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+          height: 84,
+          color: Color(0xFF2a3035),
+          child: Padding(
+            padding:
+            const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
+            child: RaisedButton(
+              color: Color(0xffe1594b),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(22.0),
+                  side: BorderSide(color: Colors.white)),
+              child: Text(
+                'Log Out',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                _logOut();
+              },
+            ),
+          )),
+    );
+  }
+
   Widget _buildBody(HomePageViewModel vm) {
     return new Padding(
       padding: const EdgeInsets.only(top: 0),
@@ -254,43 +332,6 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Center(
-                      child: Text(
-                        "Home Page",
-                        style: TextStyle(
-                          fontSize: 40,
-                          color: Color(0xff5eab9f),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: Container(
-                          height: 84,
-                          color: Color(0xFF2a3035),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10, bottom: 30, right: 24, left: 24),
-                            child: RaisedButton(
-                              color: Color(0xffe1594b),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(22.0),
-                                  side: BorderSide(color: Colors.white)),
-                              child: Text(
-                                'create 10 users',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () {
-                                vm.createUsers();
-                              },
-                            ),
-                          )),
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 0),
                       child: StreamBuilder(
@@ -332,58 +373,64 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Container(
-            color: Color(0xFF2a3035),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-            ),
-          ),
-        ),
-        Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Colors.transparent,
-          body: StoreConnector(
-            distinct: true,
-            converter: HomePageViewModel.fromStore,
-            onInit: _onInit,
-            onDispose: _onDispose,
-            onWillChange: _onWillChange,
-            onDidChange: _onDidChange,
-            builder: (BuildContext context, HomePageViewModel vm) {
-              return vm.loading
-                  ? _loaderWidget() : _buildBody(vm);
-//                  : vm.error != '' && vm.error is PlatformException ? _errorWidget("test") : _buildBody(vm);
-            },
-          ),
-          bottomNavigationBar: Container(
-              height: 84,
-              color: Color(0xFF2a3035),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 30, right: 24, left: 24),
-                child: RaisedButton(
-                  color: Color(0xffe1594b),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(22.0),
-                      side: BorderSide(color: Colors.white)),
-                  child: Text(
-                    'Log Out',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Color(0xFF2a3035),
+      body: StoreConnector(
+        distinct: true,
+        converter: HomePageViewModel.fromStore,
+        onInit: _onInit,
+        onDispose: _onDispose,
+        onWillChange: _onWillChange,
+        onDidChange: _onDidChange,
+        builder: (BuildContext context, HomePageViewModel vm) {
+          return vm.loading
+              ? _loaderWidget()
+              : SafeArea(
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(
+                        top: 50, left: 20.0, right: 20.0, bottom: 100),
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          _buildTitle(),
+                          _buildButtonCreateUsers(),
+                          _buildUsers(vm),
+                          _buildButtonLogOut(),
+                        ],
+                      );
+                    },
                   ),
-                  onPressed: () {
-                    _logOut();
-                  },
-                ),
-              )),
-        ),
-      ],
+                );
+//                  : vm.error != '' && vm.error is PlatformException ? _errorWidget("test") : _buildBody(vm);
+        },
+      ),
+//      bottomNavigationBar: Container(
+//          height: 84,
+//          color: Color(0xFF2a3035),
+//          child: Padding(
+//            padding: const EdgeInsets.only(
+//                top: 10, bottom: 30, right: 24, left: 24),
+//            child: RaisedButton(
+//              color: Color(0xffe1594b),
+//              elevation: 0,
+//              shape: RoundedRectangleBorder(
+//                  borderRadius: new BorderRadius.circular(22.0),
+//                  side: BorderSide(color: Colors.white)),
+//              child: Text(
+//                'Log Out',
+//                style: TextStyle(
+//                  fontSize: 16,
+//                  color: Colors.white,
+//                ),
+//              ),
+//              onPressed: () {
+//                _logOut();
+//              },
+//            ),
+//          )),
     );
   }
 }

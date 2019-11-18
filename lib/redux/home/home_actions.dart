@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_test_app/data/models/user.dart';
 
 class ResetState {}
 
@@ -13,6 +14,12 @@ class CreateUsers {}
 class GetUsers {}
 
 class ShowResult {}
+
+class ShowUsersAction {
+  List<ListUsers> usersList;
+
+  ShowUsersAction(this.usersList);
+}
 
 class ShowError {
   final Object error;

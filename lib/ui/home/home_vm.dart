@@ -1,3 +1,4 @@
+import 'package:flutter_test_app/data/models/user.dart';
 import 'package:redux/redux.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +15,21 @@ class HomePageViewModel extends Equatable {
   final Function() resetState;
   final Function() getUsers;
   final Function() createUsers;
-  HomePageViewModel({
-    this.loading,
-    this.error,
-    this.removeItem,
-    this.isDefault,
-    this.resetState,
-    this.getUsers,
-    this.createUsers,
-  }) : super([
+  List<ListUsers> users;
+  HomePageViewModel(
+      {this.loading,
+      this.error,
+      this.removeItem,
+      this.isDefault,
+      this.resetState,
+      this.getUsers,
+      this.createUsers,
+      this.users})
+      : super([
           loading,
           error,
           isDefault,
+          users,
         ]);
 
   static HomePageViewModel fromStore(Store<AppState> store) {
@@ -37,6 +41,7 @@ class HomePageViewModel extends Equatable {
       createUsers: () => store.dispatch(CreateUsers()),
       isDefault: store.state.homePageState.isLoading,
       resetState: () => store.dispatch(ResetState()),
+      users: store.state.homePageState.users,
     );
   }
 }
