@@ -6,6 +6,7 @@ import 'package:flutter_test_app/redux/home/home_actions.dart';
 Reducer<HomePageState> homePageReducer = combineReducers<HomePageState>([
   TypedReducer<HomePageState, RemoveItem>(_removeItem),
   TypedReducer<HomePageState, GetUsers>(_getUsers),
+  TypedReducer<HomePageState, ShowUsersAction>(_showUsers),
   TypedReducer<HomePageState, CreateUsers>(_createUsers),
   TypedReducer<HomePageState, ShowError>(_showError),
   TypedReducer<HomePageState, ResetState>(_resetState),
@@ -15,6 +16,14 @@ Reducer<HomePageState> homePageReducer = combineReducers<HomePageState>([
 HomePageState _removeItem(HomePageState state, RemoveItem action) {
   return state.copyWith(
     isLoading: true,
+    error: '',
+  );
+}
+
+HomePageState _showUsers(HomePageState state, ShowUsersAction action) {
+  return state.copyWith(
+    users: action.usersList,
+    isLoading: false,
     error: '',
   );
 }
@@ -41,6 +50,7 @@ HomePageState _showResult(HomePageState state, ShowResult action) {
 
 HomePageState _showError(HomePageState state, ShowError action) {
   return state.copyWith(
+    users: List(),
     isLoading: false,
     error: action.error,
   );

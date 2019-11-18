@@ -43,6 +43,7 @@ class HomeMiddleware {
     next(action);
     await authRepo.getUsers().then((usersList) {
       store.dispatch(ShowUsersAction(usersList));
+      print(usersList);
     }).catchError((error) {
       store.dispatch(ShowError(error));
     });
