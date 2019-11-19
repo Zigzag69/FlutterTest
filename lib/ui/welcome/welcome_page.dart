@@ -7,14 +7,6 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  GlobalKey<ScaffoldState> _scaffoldKey;
-
-  @override
-  void initState() {
-    super.initState();
-    _scaffoldKey = GlobalKey<ScaffoldState>();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -34,7 +26,6 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ),
         Scaffold(
-          key: _scaffoldKey,
           backgroundColor: Colors.transparent,
           body: LayoutBuilder(
             builder: (context, constraints) {
@@ -62,8 +53,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               elevation: 0,
                               color: Color(0xffe1594b),
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                new BorderRadius.circular(22.0),
+                                borderRadius: new BorderRadius.circular(22.0),
                               ),
                               child: Text(
                                 'Войти',
@@ -86,8 +76,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               elevation: 0,
                               color: Color(0xff5eab9f),
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  new BorderRadius.circular(22.0),
+                                  borderRadius: new BorderRadius.circular(22.0),
                                   side: BorderSide(color: Colors.white)),
                               child: Text(
                                 'Регистрация',

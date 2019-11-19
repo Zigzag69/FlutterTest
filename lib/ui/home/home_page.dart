@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_test_app/ui/item_details/item_details_page.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/svg.dart';
@@ -233,7 +234,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(AppRoutes.item_details,
+//                      arguments: ItemDetailsArgs(),
+                  );
+                },
               ),
             ),
             Padding(

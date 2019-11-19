@@ -31,6 +31,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  final fa = FirebaseAuth.instance;
   final sp = await SharedPreferences.getInstance();
   final store = await appStore(sp);
   final isSessionAvailable = checkSession(sp);
