@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         _buildTitle(),
-        _buildButtonCreateUsers(),
+        _buildButtonCreateUsers(vm),
         Expanded(
           child: ListView.builder(
             itemCount: vm.users.length,
@@ -129,33 +129,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildButtonCreateUsers() {
+  Widget _buildButtonCreateUsers(HomePageViewModel vm) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25),
-      child: Container(
-          height: 84,
-          color: Color(0xFF2a3035),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
-            child: RaisedButton(
-              color: Color(0xffe1594b),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(22.0),
-                  side: BorderSide(color: Colors.white)),
-              child: Text(
-                'create 10 users',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                print("create 10 users");
-              },
+      padding: const EdgeInsets.only(top: 24, right: 24, left: 24, bottom: 24),
+      child: SizedBox(
+        height: 44,
+        child: RaisedButton(
+          color: Color(0xffe1594b),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(22.0),
+              side: BorderSide(color: Colors.white)),
+          child: Text(
+            'Create 10 users',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
             ),
-          )),
+          ),
+          onPressed: () {
+            vm.createUsers();
+          },
+        ),
+      ),
     );
   }
 
@@ -235,15 +231,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(AppRoutes.item_details,
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.item_details,
 //                      arguments: ItemDetailsArgs(),
                   );
                 },
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 12),
               child: IconButton(
                 icon: SvgPicture.asset(
                   'assets/images/ic_trash_white.svg',
@@ -261,31 +257,27 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildButtonLogOut() {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-          height: 84,
-          color: Color(0xFF2a3035),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
-            child: RaisedButton(
-              color: Color(0xffe1594b),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(22.0),
-                  side: BorderSide(color: Colors.white)),
-              child: Text(
-                'Log Out',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                _logOut();
-              },
+      padding: const EdgeInsets.only(top: 24, right: 24, left: 24, bottom: 24),
+      child: SizedBox(
+        height: 44,
+        child: RaisedButton(
+          color: Color(0xffe1594b),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(22.0),
+              side: BorderSide(color: Colors.white)),
+          child: Text(
+            'Log Out',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
             ),
-          )),
+          ),
+          onPressed: () {
+            _logOut();
+          },
+        ),
+      ),
     );
   }
 

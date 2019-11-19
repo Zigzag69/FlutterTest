@@ -60,7 +60,7 @@ class AuthRepo {
     String lastName,
     int age,
   ) async {
-    Future.delayed(Duration(seconds: 1));
+//    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       throw PlatformException(
@@ -80,7 +80,7 @@ class AuthRepo {
     String email,
     String password,
   ) async {
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       throw PlatformException(
@@ -103,7 +103,7 @@ class AuthRepo {
   Future<void> deleteData(
     DocumentSnapshot document,
   ) async {
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       throw PlatformException(
@@ -119,7 +119,7 @@ class AuthRepo {
     DocumentSnapshot document,
     String newName,
   ) async {
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       throw PlatformException(
