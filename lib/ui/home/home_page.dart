@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter_test_app/common/consts/keys.dart';
@@ -70,14 +69,102 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Color(0xFF2a3035),
+      body: StoreConnector(
+        distinct: true,
+        converter: HomePageViewModel.fromStore,
+        onInit: _onInit,
+        onDispose: _onDispose,
+        onDidChange: _onDidChange,
+        builder: (BuildContext context, HomePageViewModel vm) {
+          return vm.loading
+              ? LoaderWidget()
+              : vm.bError != '' ? _errorWidget(vm) : _buildBody(vm);
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(HomePageViewModel vm) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _buildTitle(),
+        _buildButtonCreateUsers(),
+        Expanded(
+          child: ListView.builder(
+            itemCount: vm.users.length,
+            itemBuilder: (context, index) {
+              return _buildListView(
+                vm,
+                context,
+                index,
+              );
+            },
+          ),
+        ),
+        _buildButtonLogOut(),
+      ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return Padding(
+      padding: EdgeInsets.only(top: 50),
+      child: Center(
+        child: Text(
+          "Home Page",
+          style: TextStyle(
+            fontSize: 40,
+            color: Color(0xff5eab9f),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtonCreateUsers() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 25),
+      child: Container(
+          height: 84,
+          color: Color(0xFF2a3035),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
+            child: RaisedButton(
+              color: Color(0xffe1594b),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(22.0),
+                  side: BorderSide(color: Colors.white)),
+              child: Text(
+                'create 10 users',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                print("create 10 users");
+              },
+            ),
+          )),
+    );
+  }
+
   Widget _buildListView(
     HomePageViewModel vm,
     BuildContext context,
-    DocumentSnapshot document,
     index,
   ) {
     return new Padding(
-        padding: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
         child: Row(
           children: <Widget>[
             GestureDetector(
@@ -90,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 12),
                     child: Text(
-                      document['firstName'],
+                      vm.users[index].firstName.toString(),
                       style: TextStyle(
                         color: Color(0xFFfffff8),
                         fontSize: 16,
@@ -99,9 +186,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              onTap: () {
-                vm.getUsers();
-              },
+              onTap: () {},
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10),
@@ -115,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
-                        document['lastName'],
+                        vm.users[index].lastName.toString(),
                         style: TextStyle(
                           color: Color(0xFFfffff8),
                           fontSize: 16,
@@ -124,13 +209,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                onTap: () {
-                  vm.getUsers();
-//                  Navigator.of(context).pushNamed(
-//                    AppRoutes.item_details,
-//                    arguments: ItemDetailsArgs(document),
-//                  );
-                },
+                onTap: () {},
               ),
             ),
             Padding(
@@ -145,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
-                        document['age'].toString(),
+                        vm.users[index].age.toString(),
                         style: TextStyle(
                           color: Color(0xFFfffff8),
                           fontSize: 16,
@@ -154,13 +233,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                onTap: () {
-                  vm.getUsers();
-//                  Navigator.of(context).pushNamed(
-//                    AppRoutes.item_details,
-//                    arguments: ItemDetailsArgs(document),
-//                  );
-                },
+                onTap: () {},
               ),
             ),
             Padding(
@@ -172,12 +245,42 @@ class _HomePageState extends State<HomePage> {
                   height: 44.0,
                 ),
                 onPressed: () {
-                  vm.removeItem(document);
+//                  vm.removeItem(vm.users[index]);
                 },
               ),
             ),
           ],
         ));
+  }
+
+  Widget _buildButtonLogOut() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+          height: 84,
+          color: Color(0xFF2a3035),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
+            child: RaisedButton(
+              color: Color(0xffe1594b),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(22.0),
+                  side: BorderSide(color: Colors.white)),
+              child: Text(
+                'Log Out',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                _logOut();
+              },
+            ),
+          )),
+    );
   }
 
   Widget _errorWidget(HomePageViewModel vm) {
@@ -225,180 +328,14 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
 
-  Widget _loaderWidget() {
+class LoaderWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return new Center(
       child: CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-      ),
-    );
-  }
-
-  Widget _buildTitle() {
-    return Center(
-      child: Text(
-        "Home Page",
-        style: TextStyle(
-          fontSize: 40,
-          color: Color(0xff5eab9f),
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButtonCreateUsers() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-          height: 84,
-          color: Color(0xFF2a3035),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
-            child: RaisedButton(
-              color: Color(0xffe1594b),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(22.0),
-                  side: BorderSide(color: Colors.white)),
-              child: Text(
-                'create 10 users',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                print("create 10 users");
-              },
-            ),
-          )),
-    );
-  }
-
-  Widget _buildUsers(HomePageViewModel vm) {
-    print("DOCENT USERS = ${vm.users}");
-    return SizedBox();
-  }
-
-  Widget _buildButtonLogOut() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Container(
-          height: 84,
-          color: Color(0xFF2a3035),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
-            child: RaisedButton(
-              color: Color(0xffe1594b),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(22.0),
-                  side: BorderSide(color: Colors.white)),
-              child: Text(
-                'Log Out',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                _logOut();
-              },
-            ),
-          )),
-    );
-  }
-
-  Widget _buildBody(HomePageViewModel vm) {
-    return new Padding(
-      padding: const EdgeInsets.only(top: 0),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(24, 50, 24, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0),
-                      child: StreamBuilder(
-                        stream:
-                            Firestore.instance.collection('users').snapshots(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData)
-                            return const Center(
-                              child: Text(
-                                "Loading...",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Color(0xFFfffff8),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            );
-                          return ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.documents.length,
-                              itemBuilder: (context, index) => _buildListView(
-                                  vm,
-                                  context,
-                                  snapshot.data.documents[index],
-                                  index));
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Color(0xFF2a3035),
-      body: StoreConnector(
-        distinct: true,
-        converter: HomePageViewModel.fromStore,
-        onInit: _onInit,
-        onDispose: _onDispose,
-        onDidChange: _onDidChange,
-        builder: (BuildContext context, HomePageViewModel vm) {
-          return vm.loading
-              ? _loaderWidget()
-              : vm.bError != ''
-                  ? _errorWidget(vm)
-                  : SafeArea(
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(
-                            top: 50, left: 20.0, right: 20.0, bottom: 100),
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              _buildTitle(),
-                              _buildButtonCreateUsers(),
-                              _buildUsers(vm),
-                              _buildButtonLogOut(),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-        },
       ),
     );
   }

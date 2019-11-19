@@ -12,34 +12,7 @@ class AuthRepo {
       "Something went wrong. Please check your internet and try again";
 
   Future<List<User>> getUsers() async {
-    try {
-      await Future.delayed(Duration(seconds: 1));
-      var result = await Connectivity().checkConnectivity();
-      if (result == ConnectivityResult.none) {
-        throw PlatformException(
-          code: "Test error code",
-          message: messageNetworkError,
-        );
-      }
-
-      QuerySnapshot querySnapshot =
-          await Firestore.instance.collection("users").getDocuments();
-      List<DocumentSnapshot> users = querySnapshot.documents;
-      List<User> usersList = List();
-      users.forEach((item) {
-        usersList.add(User.fromJson(item.data));
-      });
-      return usersList;
-    } catch (error) {
-      throw error.toString();
-    }
-  }
-
-  Future<void> signIn(
-    String email,
-    String password,
-  ) async {
-//      Future.delayed(Duration(seconds: 2)); // not working
+    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       throw PlatformException(
@@ -48,19 +21,38 @@ class AuthRepo {
       );
     }
 
-    try {
-      final AuthResult authResult =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+    QuerySnapshot querySnapshot =
+        await Firestore.instance.collection("users").getDocuments();
+    List<DocumentSnapshot> users = querySnapshot.documents;
+    List<User> usersList = List();
+    users.forEach((item) {
+      usersList.add(User.fromJson(item.data));
+    });
+    return usersList;
+  }
+
+  Future<void> signIn(
+    String email,
+    String password,
+  ) async {
+    await Future.delayed(Duration(seconds: 1));
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      throw PlatformException(
+        code: "Test error code",
+        message: messageNetworkError,
       );
-      final FirebaseUser user = authResult.user;
-      final sp = await SharedPreferences.getInstance();
-      await sp.setBool('user', true);
-      return user;
-    } catch (error) {
-      throw error.toString();
     }
+
+    final AuthResult authResult =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final FirebaseUser user = authResult.user;
+    final sp = await SharedPreferences.getInstance();
+    await sp.setBool('user', true);
+    return user;
   }
 
   Future<void> createUsers(
@@ -68,90 +60,74 @@ class AuthRepo {
     String lastName,
     int age,
   ) async {
-    try {
-//      Future.delayed(Duration(seconds: 2));
-//      var result = await Connectivity().checkConnectivity();
-//      if (result == ConnectivityResult.none) {
-//        throw PlatformException(
-//          code: "Test error code",
-//          message: messageNetworkError,
-//        );
-//      }
-
-      Firestore.instance.collection("users").document().setData({
-        'firstName': firstName,
-        'lastName': lastName,
-        'age': age,
-      });
-    } catch (error) {
-      throw error.toString();
+    Future.delayed(Duration(seconds: 1));
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      throw PlatformException(
+        code: "Test error code",
+        message: messageNetworkError,
+      );
     }
+
+    Firestore.instance.collection("users").document().setData({
+      'firstName': firstName,
+      'lastName': lastName,
+      'age': age,
+    });
   }
 
   Future<void> signUp(
     String email,
     String password,
   ) async {
-//      Future.delayed(Duration(seconds: 2));
-//      var result = await Connectivity().checkConnectivity();
-//      if (result == ConnectivityResult.none) {
-//        throw PlatformException(
-//          code: "Test error code",
-//          message: messageNetworkError,
-//        );
-//      }
-
-    try {
-      final AuthResult authResult =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+    Future.delayed(Duration(seconds: 1));
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      throw PlatformException(
+        code: "Test error code",
+        message: messageNetworkError,
       );
-      final FirebaseUser user = authResult.user;
-      final sp = await SharedPreferences.getInstance();
-      await sp.setBool('user', true);
-      return user;
-    } catch (error) {
-      throw error.toString();
     }
+
+    final AuthResult authResult =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final FirebaseUser user = authResult.user;
+    final sp = await SharedPreferences.getInstance();
+    await sp.setBool('user', true);
+    return user;
   }
 
   Future<void> deleteData(
     DocumentSnapshot document,
   ) async {
-    //      Future.delayed(Duration(seconds: 2));
-//      var result = await Connectivity().checkConnectivity();
-//      if (result == ConnectivityResult.none) {
-//        throw PlatformException(
-//          code: "Test error code",
-//          message: messageNetworkError,
-//        );
-//      }
-
-    try {
-      await document.reference.delete();
-    } catch (error) {
-      throw error.toString();
+    Future.delayed(Duration(seconds: 1));
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      throw PlatformException(
+        code: "Test error code",
+        message: messageNetworkError,
+      );
     }
+
+    await document.reference.delete();
   }
 
   Future<void> updateData(
     DocumentSnapshot document,
     String newName,
   ) async {
-    //      Future.delayed(Duration(seconds: 2));
-//      var result = await Connectivity().checkConnectivity();
-//      if (result == ConnectivityResult.none) {
-//        throw PlatformException(
-//          code: "Test error code",
-//          message: messageNetworkError,
-//        );
-//      }
-
-    try {
-      await document.reference.updateData({'names': newName});
-    } catch (error) {
-      throw error.toString();
+    Future.delayed(Duration(seconds: 1));
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      throw PlatformException(
+        code: "Test error code",
+        message: messageNetworkError,
+      );
     }
+
+    await document.reference.updateData({'names': newName});
   }
 }
