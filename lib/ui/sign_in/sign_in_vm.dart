@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_test_app/redux/sign_in/sign_in_state.dart';
 import 'package:redux/redux.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -32,13 +33,15 @@ class SignInPageViewModel extends Equatable {
         ]);
 
   static SignInPageViewModel fromStore(Store<AppState> store) {
+    final SignInPageState state = store.state.signInPageState;
+
     return SignInPageViewModel(
-      loading: store.state.signInPageState.isLoading,
-      email: store.state.signInPageState.email,
-      password: store.state.signInPageState.password,
-      error: store.state.signInPageState.error,
+      loading: state.isLoading,
+      email: state.email,
+      password: state.password,
+      error: state.error,
       signIn: (email, password) => store.dispatch(SignIn(email, password)),
-      isDefault: store.state.signInPageState.isLoading,
+      isDefault: state.isDefault(),
       resetState: () => store.dispatch(ResetState()),
     );
   }

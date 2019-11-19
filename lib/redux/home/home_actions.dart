@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test_app/data/models/user.dart';
 
-class ResetState {}
-
 class RemoveItem {
   final DocumentSnapshot document;
 
@@ -17,12 +15,17 @@ class ShowResult {}
 
 class ShowUsersAction {
   List<User> usersList;
+  final Object bError;
 
-  ShowUsersAction(this.usersList);
+  ShowUsersAction(this.usersList, this.bError);
 }
 
-class ShowError {
-  final Object error;
+class ShowSError {
+  final Object sError;
 
-  ShowError(this.error);
+  ShowSError(this.sError);
 }
+
+class ClearSError {}
+
+class ResetState {}

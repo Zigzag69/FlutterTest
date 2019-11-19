@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/home/home_state.dart';
 import 'package:flutter_test_app/redux/home/home_actions.dart';
@@ -8,15 +7,23 @@ Reducer<HomePageState> homePageReducer = combineReducers<HomePageState>([
   TypedReducer<HomePageState, GetUsers>(_getUsers),
   TypedReducer<HomePageState, ShowUsersAction>(_showUsers),
   TypedReducer<HomePageState, CreateUsers>(_createUsers),
-  TypedReducer<HomePageState, ShowError>(_showError),
+  TypedReducer<HomePageState, ShowSError>(_showSError),
+  TypedReducer<HomePageState, ClearSError>(_clearSError),
   TypedReducer<HomePageState, ResetState>(_resetState),
   TypedReducer<HomePageState, ShowResult>(_showResult),
 ]);
 
+HomePageState _getUsers(HomePageState state, GetUsers action) {
+  return state.copyWith(
+    isLoading: true,
+    bError: '',
+  );
+}
+
 HomePageState _removeItem(HomePageState state, RemoveItem action) {
   return state.copyWith(
     isLoading: true,
-    error: '',
+    sError: '',
   );
 }
 
@@ -24,21 +31,14 @@ HomePageState _showUsers(HomePageState state, ShowUsersAction action) {
   return state.copyWith(
     users: action.usersList,
     isLoading: false,
-    error: '',
-  );
-}
-
-HomePageState _getUsers(HomePageState state, GetUsers action) {
-  return state.copyWith(
-    isLoading: true,
-    error: '',
+    bError: action.bError,
   );
 }
 
 HomePageState _createUsers(HomePageState state, CreateUsers action) {
   return state.copyWith(
     isLoading: true,
-    error: '',
+    sError: '',
   );
 }
 
@@ -48,14 +48,21 @@ HomePageState _showResult(HomePageState state, ShowResult action) {
   );
 }
 
-HomePageState _showError(HomePageState state, ShowError action) {
+HomePageState _showSError(HomePageState state, ShowSError action) {
   return state.copyWith(
-    users: List(),
+    users: [],
     isLoading: false,
-    error: action.error,
+    sError: action.sError,
+  );
+}
+
+HomePageState _clearSError(HomePageState state, ClearSError action) {
+  return state.copyWith(
+    sError: '',
   );
 }
 
 HomePageState _resetState(HomePageState state, ResetState action) {
   return HomePageState.initial();
 }
+

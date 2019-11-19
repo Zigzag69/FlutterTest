@@ -31,7 +31,7 @@ class HomeMiddleware {
       store.dispatch(ShowResult());
     }).catchError((error) {
       print(error);
-      store.dispatch(ShowError(error));
+      store.dispatch(ShowSError(error));
     });
   }
 
@@ -42,10 +42,10 @@ class HomeMiddleware {
   ) async {
     next(action);
     await authRepo.getUsers().then((usersList) {
-      store.dispatch(ShowUsersAction(usersList));
+      store.dispatch(ShowUsersAction(usersList, ''));
       print(usersList);
     }).catchError((error) {
-      store.dispatch(ShowError(error));
+      store.dispatch(ShowUsersAction([], error));
     });
   }
 
@@ -68,7 +68,7 @@ class HomeMiddleware {
         store.dispatch(ShowResult());
       }).catchError((error) {
         print(error);
-        store.dispatch(ShowError(error));
+        store.dispatch(ShowSError(error));
       });
     }
   }

@@ -5,39 +5,49 @@ import 'package:meta/meta.dart';
 @immutable
 class HomePageState extends Equatable {
   final bool isLoading;
-  final Object error;
+  final Object sError;
+  final Object bError;
   final List<User> users;
+
   HomePageState({
     this.isLoading,
-    this.error,
+    this.sError,
+    this.bError,
     this.users,
   }) : super([
           isLoading,
-          error,
+          sError,
+          bError,
           users,
         ]);
 
   factory HomePageState.initial() {
     return HomePageState(
       isLoading: false,
-      error: '',
-      users: List(),
+      sError: '',
+      bError: '',
+      users: [],
     );
   }
 
   HomePageState copyWith({
     bool isLoading,
-    Object error,
+    Object sError,
+    Object bError,
     List<User> users,
   }) {
     return HomePageState(
       isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
+      sError: sError ?? this.sError,
+      bError: bError ?? this.bError,
       users: users ?? this.users,
     );
   }
 
   bool isDefault() {
-    return isLoading == false && error == '' && users == List();
+    return isLoading == false &&
+        sError == '' &&
+        bError == '' &&
+        users == [];
   }
 }

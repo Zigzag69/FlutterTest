@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_test_app/redux/item_details/item_details_state.dart';
 import 'package:redux/redux.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +26,14 @@ class ItemDetailsViewModel extends Equatable {
         ]);
 
   static ItemDetailsViewModel fromStore(Store<AppState> store) {
+    final ItemDetailsState state = store.state.itemDetailsState;
+
     return ItemDetailsViewModel(
-      loading: store.state.itemDetailsState.isLoading,
-      error: store.state.itemDetailsState.error,
+      loading: state.isLoading,
+      error: state.error,
       updateItem: (document, newName) =>
           store.dispatch(UpdateItem(document, newName)),
-      isDefault: store.state.itemDetailsState.isLoading,
+      isDefault: state.isDefault(),
       resetState: () => store.dispatch(ResetState()),
     );
   }

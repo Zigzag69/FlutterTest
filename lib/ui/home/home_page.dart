@@ -1,17 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_test_app/common/consts/keys.dart';
-import 'package:flutter_test_app/ui/item_details/item_details_page.dart';
 import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/svg.dart';
+
+import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/home/home_actions.dart';
 import 'package:flutter_test_app/ui/home/home_vm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:io';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,21 +34,16 @@ class _HomePageState extends State<HomePage> {
     store.dispatch(ResetState());
   }
 
-  _onWillChange(HomePageViewModel vm) {
-    if (vm.isDefault) return;
-    vm.resetState();
-  }
-
   _onDidChange(HomePageViewModel vm) {
     if (vm.isDefault) return;
-    if (vm.error == '') return;
-    vm.resetState();
+    if (vm.sError == '') return;
+    vm.clearSError();
     String message;
-    if (vm.error is PlatformException) {
-      PlatformException pe = vm.error;
+    if (vm.sError is PlatformException) {
+      PlatformException pe = vm.sError;
       message = pe.message;
     } else {
-      message = vm.error.toString();
+      message = vm.sError.toString();
     }
     _scaffoldKey.currentState.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
@@ -187,7 +180,7 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  Widget _errorWidget(String errorText) {
+  Widget _errorWidget(HomePageViewModel vm) {
     return Padding(
       padding: EdgeInsets.all(36),
       child: Column(
@@ -195,7 +188,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            errorText,
+            vm.bError,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'poppins_medium',
@@ -204,25 +197,30 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
           ),
-          RaisedButton(
-            color: Color(0xffBD10E0),
-            elevation: 0,
-            highlightElevation: 0,
-            padding: EdgeInsets.only(top: 18, bottom: 19),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
-            child: Text(
-              'Try again',
-              style: TextStyle(
-                fontFamily: 'poppins_medium',
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              print("tap");
-            },
-          ),
+          Container(
+              height: 84,
+              color: Color(0xFF2a3035),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 30, right: 24, left: 24),
+                child: RaisedButton(
+                  color: Color(0xffe1594b),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(22.0),
+                      side: BorderSide(color: Colors.white)),
+                  child: Text(
+                    'Try again',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    vm.getUsers();
+                  },
+                ),
+              )),
         ],
       ),
     );
@@ -292,7 +290,7 @@ class _HomePageState extends State<HomePage> {
           color: Color(0xFF2a3035),
           child: Padding(
             padding:
-            const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
+                const EdgeInsets.only(top: 10, bottom: 30, right: 24, left: 24),
             child: RaisedButton(
               color: Color(0xffe1594b),
               elevation: 0,
@@ -376,56 +374,32 @@ class _HomePageState extends State<HomePage> {
         converter: HomePageViewModel.fromStore,
         onInit: _onInit,
         onDispose: _onDispose,
-        onWillChange: _onWillChange,
         onDidChange: _onDidChange,
         builder: (BuildContext context, HomePageViewModel vm) {
           return vm.loading
               ? _loaderWidget()
-              : SafeArea(
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(
-                        top: 50, left: 20.0, right: 20.0, bottom: 100),
-                    itemCount: 1,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          _buildTitle(),
-                          _buildButtonCreateUsers(),
-                          _buildUsers(vm),
-                          _buildButtonLogOut(),
-                        ],
-                      );
-                    },
-                  ),
-                );
-//                  : vm.error != '' && vm.error is PlatformException ? _errorWidget("test") : _buildBody(vm);
+              : vm.bError != ''
+                  ? _errorWidget(vm)
+                  : SafeArea(
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(
+                            top: 50, left: 20.0, right: 20.0, bottom: 100),
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              _buildTitle(),
+                              _buildButtonCreateUsers(),
+                              _buildUsers(vm),
+                              _buildButtonLogOut(),
+                            ],
+                          );
+                        },
+                      ),
+                    );
         },
       ),
-//      bottomNavigationBar: Container(
-//          height: 84,
-//          color: Color(0xFF2a3035),
-//          child: Padding(
-//            padding: const EdgeInsets.only(
-//                top: 10, bottom: 30, right: 24, left: 24),
-//            child: RaisedButton(
-//              color: Color(0xffe1594b),
-//              elevation: 0,
-//              shape: RoundedRectangleBorder(
-//                  borderRadius: new BorderRadius.circular(22.0),
-//                  side: BorderSide(color: Colors.white)),
-//              child: Text(
-//                'Log Out',
-//                style: TextStyle(
-//                  fontSize: 16,
-//                  color: Colors.white,
-//                ),
-//              ),
-//              onPressed: () {
-//                _logOut();
-//              },
-//            ),
-//          )),
     );
   }
 }

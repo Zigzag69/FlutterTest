@@ -1,3 +1,4 @@
+import 'package:flutter_test_app/redux/sign_up/sign_up_state.dart';
 import 'package:redux/redux.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +31,15 @@ class SignUpPageViewModel extends Equatable {
         ]);
 
   static SignUpPageViewModel fromStore(Store<AppState> store) {
+    final SignUpPageState state = store.state.signUpPageState;
+
     return SignUpPageViewModel(
-      loading: store.state.signUpPageState.isLoading,
-      email: store.state.signUpPageState.email,
-      password: store.state.signUpPageState.password,
-      error: store.state.signUpPageState.error,
+      loading: state.isLoading,
+      email: state.email,
+      password: state.password,
+      error: state.error,
       signUp: (email, password) => store.dispatch(SignUp(email, password)),
-      isDefault: store.state.signUpPageState.isLoading,
+      isDefault: state.isDefault(),
       resetState: () => store.dispatch(ResetState()),
     );
   }

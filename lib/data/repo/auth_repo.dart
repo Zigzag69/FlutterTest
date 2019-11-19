@@ -13,14 +13,14 @@ class AuthRepo {
 
   Future<List<User>> getUsers() async {
     try {
-//      Future.delayed(Duration(seconds: 2));
-//      var result = await Connectivity().checkConnectivity();
-//      if (result == ConnectivityResult.none) {
-//        throw PlatformException(
-//          code: "Test error code",
-//          message: messageNetworkError,
-//        );
-//      }
+      await Future.delayed(Duration(seconds: 1));
+      var result = await Connectivity().checkConnectivity();
+      if (result == ConnectivityResult.none) {
+        throw PlatformException(
+          code: "Test error code",
+          message: messageNetworkError,
+        );
+      }
 
       QuerySnapshot querySnapshot =
           await Firestore.instance.collection("users").getDocuments();
