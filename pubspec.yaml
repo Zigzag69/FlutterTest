@@ -20,6 +20,7 @@ dependencies:
   random_string: 1.1.0
   connectivity: 0.4.5+3
   better_uuid: ^0.1.2
+  pull_to_refresh: ^1.5.7
 
 dev_dependencies:
   flutter_test:

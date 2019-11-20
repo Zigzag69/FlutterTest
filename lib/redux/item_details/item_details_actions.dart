@@ -1,14 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ResetState {}
 
 class UpdateItem {
-  final DocumentSnapshot document;
-  final String newName;
+  final String id;
+  final String firstName;
 
   UpdateItem(
-    this.document,
-    this.newName,
+    this.id,
+    this.firstName,
   );
 }
 

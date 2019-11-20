@@ -28,7 +28,7 @@ class HomeMiddleware {
       await authRepo.getUsers().then((usersList) {
         store.dispatch(ShowUsersAction(usersList, ''));
       }).catchError((error) {
-        store.dispatch(ShowUsersAction([], error));
+        store.dispatch(ShowSError(error));
       });
     }).catchError((error) {
       print(error);
@@ -55,7 +55,8 @@ class HomeMiddleware {
     NextDispatcher next,
   ) async {
     next(action);
-    for (var i = 0; i < 10; i++) {
+//    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 1; i++) {
       var randomFirstName = randomString(5);
       var randomLastName = randomString(5);
       var randomAge = randomBetween(5, 100);
@@ -63,12 +64,12 @@ class HomeMiddleware {
       await authRepo
           .createUsers(randomFirstName, randomLastName, randomAge, randomId)
           .then((result) async {
-        if (i == 9) {
+        if (i == 0) {
           await authRepo.getUsers().then((usersList) {
             store.dispatch(ShowUsersAction(usersList, ''));
             print(usersList);
           }).catchError((error) {
-            store.dispatch(ShowUsersAction([], error));
+            store.dispatch(ShowSError(error));
           });
         }
       }).catchError((error) {

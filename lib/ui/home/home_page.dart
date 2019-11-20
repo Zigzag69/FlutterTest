@@ -183,7 +183,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.item_details,
+                  arguments: ItemDetailsArgs(vm.users[index]),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10),
@@ -206,7 +211,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.item_details,
+                    arguments: ItemDetailsArgs(vm.users[index]),
+                  );
+                },
               ),
             ),
             Padding(
@@ -233,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     AppRoutes.item_details,
-//                      arguments: ItemDetailsArgs(),
+                      arguments: ItemDetailsArgs(vm.users[index]),
                   );
                 },
               ),

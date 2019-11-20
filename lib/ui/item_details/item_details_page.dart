@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_test_app/common/consts/keys.dart';
+import 'package:flutter_test_app/data/models/user.dart';
 import 'package:flutter_test_app/redux/item_details/item_details_actions.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
@@ -11,9 +12,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemDetailsArgs {
-  final DocumentSnapshot document;
+  final User user;
 
-  ItemDetailsArgs(this.document);
+  ItemDetailsArgs(this.user);
 }
 
 class ItemDetailsPage extends StatefulWidget {
@@ -54,7 +55,7 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
   _onWillChange(ItemDetailsViewModel vm) {
     if (vm.isDefault) return;
     vm.resetState();
-    Navigator.of(context).pop();
+    _goBack();
   }
 
   _onDidChange(ItemDetailsViewModel vm) {
@@ -88,29 +89,97 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
     Navigator.of(context).pop();
   }
 
-  Widget _buildListView(ItemDetailsViewModel vm, BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Color(0xFF2a3035),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: _goBack,
+        ),
+      ),
+      body: StoreConnector(
+        distinct: true,
+        converter: ItemDetailsViewModel.fromStore,
+        onInit: _onInit,
+        onDispose: _onDispose,
+        onWillChange: _onWillChange,
+        onDidChange: _onDidChange,
+        builder: (BuildContext context, ItemDetailsViewModel vm) {
+          return vm.loading ? LoaderWidget() : _buildBody(vm);
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(ItemDetailsViewModel vm) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _buildTitle(),
+        Expanded(
+          child: ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return _buildListView(
+                vm,
+                context,
+                index,
+              );
+            },
+          ),
+        ),
+        _buildButtonSave(vm),
+      ],
+    );
+  }
+
+  Widget _buildTitle() {
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: Center(
+        child: Text(
+          "Item Details Page",
+          style: TextStyle(
+            fontSize: 40,
+            color: Color(0xff5eab9f),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListView(
+    ItemDetailsViewModel vm,
+    BuildContext context,
+    index,
+  ) {
     return new Padding(
-        padding: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 50, left: 25, right: 25),
         child: Row(
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                vm.updateItem(widget.args.document, _itemController.text);
-              },
-              child: Container(
-                height: 60,
-                width: (MediaQuery.of(context).size.width) / 2 - 30,
-                color: Color(0xFF31373c),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text(
-                      widget.args.document['names'],
-                      style: TextStyle(
-                        color: Color(0xFFfffff8),
-                        fontSize: 16,
-                      ),
+            Container(
+              height: 60,
+              width: (MediaQuery.of(context).size.width) / 2 - 30,
+              color: Color(0xFF31373c),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    widget.args.user.firstName +
+                        "   " +
+                        widget.args.user.lastName +
+                        "   " +
+                        widget.args.user.age.toString(),
+                    style: TextStyle(
+                      color: Color(0xFFfffff8),
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -123,11 +192,19 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
                   textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    labelText: 'Change first name',
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xff7acfc2),
+                    ),
+                  ),
                   cursorColor: Color(0xff979797),
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
                   inputFormatters: [
-                    LengthLimitingTextInputFormatter(10),
+                    LengthLimitingTextInputFormatter(5),
                   ],
                   autocorrect: false,
                   controller: _itemController,
@@ -143,137 +220,40 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
         ));
   }
 
+  Widget _buildButtonSave(ItemDetailsViewModel vm) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, right: 24, left: 24, bottom: 24),
+      child: SizedBox(
+        height: 44,
+        child: RaisedButton(
+          color: Color(0xffe1594b),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(22.0),
+              side: BorderSide(color: Colors.white)),
+          child: Text(
+            'Save',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () {
+            vm.updateItem(widget.args.user.id, _itemController.text);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class LoaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Container(
-            color: Color(0xFF2a3035),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-            ),
-          ),
-        ),
-        Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: _goBack,
-            ),
-          ),
-          body: StoreConnector(
-            distinct: true,
-            converter: ItemDetailsViewModel.fromStore,
-            onInit: _onInit,
-            onDispose: _onDispose,
-            onWillChange: _onWillChange,
-            onDidChange: _onDidChange,
-            builder: (BuildContext context, ItemDetailsViewModel vm) {
-              return vm.loading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(top: 0),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return SingleChildScrollView(
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minHeight: constraints.maxHeight),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(24, 20, 24, 20),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    Center(
-                                      child: Text(
-                                        "Item Details Page",
-                                        style: TextStyle(
-                                            fontSize: 40,
-                                            color: Color(0xff5eab9f),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 20),
-                                      child: StreamBuilder(
-                                        stream: Firestore.instance
-                                            .collection('testItems')
-                                            .snapshots(),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData)
-                                            return const Center(
-                                              child: Text(
-                                                "Loading...",
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Color(0xFFfffff8),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            );
-                                          return ListView.builder(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              scrollDirection: Axis.vertical,
-                                              shrinkWrap: true,
-                                              itemCount: 1,
-                                              itemBuilder: (context, index) =>
-                                                  _buildListView(vm, context));
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-            },
-          ),
-          bottomNavigationBar: Container(
-            height: 56,
-            color: Color(0xFF2a3035),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 19, bottom: 6),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    ItemDetailsViewModel()
-                        .updateItem(widget.args.document, _itemController.text);
-                  },
-                  child: Container(
-                    height: 44,
-                    width: 44,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Save",
-                        style: TextStyle(
-                          color: Color(0xFFfffff8),
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return new Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      ),
     );
   }
 }

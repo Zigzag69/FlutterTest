@@ -117,8 +117,8 @@ class AuthRepo {
   }
 
   Future<void> updateData(
-    DocumentSnapshot document,
-    String newName,
+    String id,
+    String firstName,
   ) async {
     await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
@@ -129,6 +129,6 @@ class AuthRepo {
       );
     }
 
-    await document.reference.updateData({'names': newName});
+    await Firestore.instance.collection('users').document(id).updateData({'firstName' : firstName});
   }
 }
