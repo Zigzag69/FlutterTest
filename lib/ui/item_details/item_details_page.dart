@@ -55,7 +55,9 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
   _onWillChange(ItemDetailsViewModel vm) {
     if (vm.isDefault) return;
     vm.resetState();
-    _goBack();
+    Navigator.of(context).pushReplacementNamed(
+      AppRoutes.home_page,
+    );
   }
 
   _onDidChange(ItemDetailsViewModel vm) {

@@ -299,7 +299,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            vm.bError,
+            vm.bError.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'poppins_medium',
