@@ -8,11 +8,13 @@ class User {
   String firstName;
   String lastName;
   int age;
+  String id;
 
   User({
     this.firstName,
     this.lastName,
     this.age,
+    this.id,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class User {
       firstName: json["firstName"],
       lastName: json["lastName"],
       age: json["age"],
+      id: json["id"],
     );
   }
 
@@ -27,10 +30,11 @@ class User {
     "firstName": firstName,
     "lastName": lastName,
     "age": age,
+    "id": id,
   };
 
   @override
   String toString() {
-    return 'User[firstName: $firstName, lastName: $lastName, age: $age]';
+    return 'User[firstName: $firstName, lastName: $lastName, age: $age, id: $id]';
   }
 }

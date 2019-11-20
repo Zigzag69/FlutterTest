@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                   height: 44.0,
                 ),
                 onPressed: () {
-//                  vm.removeItem(vm.users[index]);
+                  vm.removeItem(vm.users[index].id);
                 },
               ),
             ),

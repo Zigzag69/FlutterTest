@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test_app/data/models/user.dart';
 
 class RemoveItem {
-  final DocumentSnapshot document;
+  final String id;
 
-  RemoveItem(this.document);
+  RemoveItem(this.id);
 }
 
 class CreateUsers {}

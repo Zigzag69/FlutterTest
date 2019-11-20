@@ -20,7 +20,7 @@ class HomePageViewModel extends Equatable {
   final Function() resetState;
   final Function() getUsers;
   final Function() createUsers;
-  final Function(DocumentSnapshot document) removeItem;
+  final Function(String id) removeItem;
 
   HomePageViewModel({
     this.loading,
@@ -52,7 +52,7 @@ class HomePageViewModel extends Equatable {
       isDefault: state.isDefault(),
       users: state.users,
       clearSError: () => store.dispatch(ClearSError),
-      removeItem: (document) => store.dispatch(RemoveItem(document)),
+      removeItem: (id) => store.dispatch(RemoveItem(id)),
       getUsers: () => store.dispatch(GetUsers()),
       createUsers: () => store.dispatch(CreateUsers()),
       resetState: () => store.dispatch(ResetState()),

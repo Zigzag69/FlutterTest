@@ -19,6 +19,7 @@ dependencies:
   flutter_svg: ^0.13.1
   random_string: 1.1.0
   connectivity: 0.4.5+3
+  better_uuid: ^0.1.2
 
 dev_dependencies:
   flutter_test:

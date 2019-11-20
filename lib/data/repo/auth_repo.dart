@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test_app/data/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,6 +58,7 @@ class AuthRepo {
     String firstName,
     String lastName,
     int age,
+    String id,
   ) async {
 //    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
@@ -69,10 +69,11 @@ class AuthRepo {
       );
     }
 
-    Firestore.instance.collection("users").document().setData({
+    Firestore.instance.collection("users").document(id).setData({
       'firstName': firstName,
       'lastName': lastName,
       'age': age,
+      'id': id,
     });
   }
 
@@ -101,9 +102,9 @@ class AuthRepo {
   }
 
   Future<void> deleteData(
-    DocumentSnapshot document,
+    String id,
   ) async {
-    await Future.delayed(Duration(seconds: 1));
+//    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       throw PlatformException(
@@ -112,7 +113,7 @@ class AuthRepo {
       );
     }
 
-    await document.reference.delete();
+    await Firestore.instance.collection('users').document(id).delete();
   }
 
   Future<void> updateData(

@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_test_app/data/models/user.dart';
 import 'package:random_string/random_string.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/redux/home/home_actions.dart';
 import 'package:flutter_test_app/data/repo/auth_repo.dart';
-import 'dart:math' show Random;
-import 'dart:convert';
+import 'package:better_uuid/uuid.dart';
 
 class HomeMiddleware {
   final AuthRepo authRepo;
@@ -27,8 +24,12 @@ class HomeMiddleware {
     NextDispatcher next,
   ) async {
     next(action);
-    await authRepo.deleteData(action.document).then((result) {
-      store.dispatch(ShowResult());
+    await authRepo.deleteData(action.id).then((result) async {
+      await authRepo.getUsers().then((usersList) {
+        store.dispatch(ShowUsersAction(usersList, ''));
+      }).catchError((error) {
+        store.dispatch(ShowUsersAction([], error));
+      });
     }).catchError((error) {
       print(error);
       store.dispatch(ShowSError(error));
@@ -43,7 +44,6 @@ class HomeMiddleware {
     next(action);
     await authRepo.getUsers().then((usersList) {
       store.dispatch(ShowUsersAction(usersList, ''));
-      print(usersList);
     }).catchError((error) {
       store.dispatch(ShowUsersAction([], error));
     });
@@ -59,8 +59,9 @@ class HomeMiddleware {
       var randomFirstName = randomString(5);
       var randomLastName = randomString(5);
       var randomAge = randomBetween(5, 100);
+      var randomId = Uuid.v1().time.toString();
       await authRepo
-          .createUsers(randomFirstName, randomLastName, randomAge)
+          .createUsers(randomFirstName, randomLastName, randomAge, randomId)
           .then((result) async {
         if (i == 9) {
           await authRepo.getUsers().then((usersList) {
