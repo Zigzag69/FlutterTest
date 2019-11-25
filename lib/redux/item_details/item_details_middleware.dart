@@ -22,7 +22,7 @@ class ItemDetailsMiddleware {
       ) async {
     next(action);
    await authRepo.updateData(action.id, action.firstName).then((result) {
-      store.dispatch(ShowResult());
+      store.dispatch(ShowResult(action.id));
     }).catchError((error) {
       print(error);
       store.dispatch(ShowError(error));

@@ -10,7 +10,11 @@ class UpdateItem {
   );
 }
 
-class ShowResult {}
+class ShowResult {
+  final String result;
+
+  ShowResult(this.result);
+}
 
 class ShowError {
   final Object error;

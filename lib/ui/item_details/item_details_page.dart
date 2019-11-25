@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_test_app/common/consts/keys.dart';
 import 'package:flutter_test_app/data/models/user.dart';
 import 'package:flutter_test_app/redux/item_details/item_details_actions.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
 import 'package:flutter_test_app/ui/item_details/item_details_vm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemDetailsArgs {
   final User user;
@@ -55,13 +51,16 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
 
   _onWillChange(ItemDetailsViewModel vm) {
     if (vm.isDefault) return;
+    if (vm.result == '') return;
     vm.resetState();
+    vm.users[widget.args.index].firstName = _itemController.text;
     _goBack();
   }
 
   _onDidChange(ItemDetailsViewModel vm) {
     if (vm.isDefault) return;
     if (vm.error == '') return;
+
     vm.resetState();
     String message;
     if (vm.error is PlatformException) {
@@ -241,8 +240,6 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
           ),
           onPressed: () {
             vm.updateItem(widget.args.user.id, _itemController.text);
-            vm.users[widget.args.index].firstName = _itemController.text;
-            _goBack();
           },
         ),
       ),

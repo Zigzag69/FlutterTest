@@ -10,6 +10,7 @@ import 'package:flutter_test_app/redux/item_details/item_details_actions.dart';
 @immutable
 class ItemDetailsViewModel extends Equatable {
   final bool loading;
+  final String result;
   final Object error;
   final Function(String id, String firstName) updateItem;
   final bool isDefault;
@@ -18,6 +19,7 @@ class ItemDetailsViewModel extends Equatable {
 
   ItemDetailsViewModel({
     this.loading,
+    this.result,
     this.error,
     this.updateItem,
     this.isDefault,
@@ -28,6 +30,7 @@ class ItemDetailsViewModel extends Equatable {
           error,
           isDefault,
           users,
+          result,
         ]);
 
   static ItemDetailsViewModel fromStore(Store<AppState> store) {
@@ -35,8 +38,9 @@ class ItemDetailsViewModel extends Equatable {
     final ItemDetailsState itemDetailsState = store.state.itemDetailsState;
 
     return ItemDetailsViewModel(
-      loading: homePageState.isLoading,
-      error: homePageState.sError,
+      result: itemDetailsState.result,
+      loading: itemDetailsState.isLoading,
+      error: itemDetailsState.error,
       users: homePageState.users,
       updateItem: (id, firstName) => store.dispatch(UpdateItem(id, firstName)),
       isDefault: itemDetailsState.isDefault(),
