@@ -19,6 +19,7 @@ ItemDetailsState _updateItem(ItemDetailsState state, UpdateItem action) {
 ItemDetailsState _showResult(ItemDetailsState state, ShowResult action) {
   return state.copyWith(
     isLoading: false,
+    result: action.result,
   );
 }
 
