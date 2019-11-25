@@ -13,8 +13,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemDetailsArgs {
   final User user;
+  final int index;
 
-  ItemDetailsArgs(this.user);
+  ItemDetailsArgs(this.user, this.index);
 }
 
 class ItemDetailsPage extends StatefulWidget {
@@ -240,6 +241,8 @@ class _ItemDetailsPageState extends State<ItemDetailsPage> {
           ),
           onPressed: () {
             vm.updateItem(widget.args.user.id, _itemController.text);
+            vm.users[widget.args.index].firstName = _itemController.text;
+            _goBack();
           },
         ),
       ),

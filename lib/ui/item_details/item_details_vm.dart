@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_test_app/data/models/user.dart';
+import 'package:flutter_test_app/redux/home/home_state.dart';
 import 'package:flutter_test_app/redux/item_details/item_details_state.dart';
 import 'package:redux/redux.dart';
 import 'package:equatable/equatable.dart';
@@ -13,27 +14,32 @@ class ItemDetailsViewModel extends Equatable {
   final Function(String id, String firstName) updateItem;
   final bool isDefault;
   final Function() resetState;
+  final List<User> users;
+
   ItemDetailsViewModel({
     this.loading,
     this.error,
     this.updateItem,
     this.isDefault,
     this.resetState,
+    this.users,
   }) : super([
           loading,
           error,
           isDefault,
+          users,
         ]);
 
   static ItemDetailsViewModel fromStore(Store<AppState> store) {
-    final ItemDetailsState state = store.state.itemDetailsState;
+    final HomePageState homePageState = store.state.homePageState;
+    final ItemDetailsState itemDetailsState = store.state.itemDetailsState;
 
     return ItemDetailsViewModel(
-      loading: state.isLoading,
-      error: state.error,
-      updateItem: (id, firstName) =>
-          store.dispatch(UpdateItem(id, firstName)),
-      isDefault: state.isDefault(),
+      loading: homePageState.isLoading,
+      error: homePageState.sError,
+      users: homePageState.users,
+      updateItem: (id, firstName) => store.dispatch(UpdateItem(id, firstName)),
+      isDefault: itemDetailsState.isDefault(),
       resetState: () => store.dispatch(ResetState()),
     );
   }

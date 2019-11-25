@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.of(context).pushNamed(
                   AppRoutes.item_details,
-                  arguments: ItemDetailsArgs(vm.users[index]),
+                  arguments: ItemDetailsArgs(vm.users[index], index),
                 );
               },
             ),
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     AppRoutes.item_details,
-                    arguments: ItemDetailsArgs(vm.users[index]),
+                    arguments: ItemDetailsArgs(vm.users[index], index),
                   );
                 },
               ),
@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     AppRoutes.item_details,
-                    arguments: ItemDetailsArgs(vm.users[index]),
+                    arguments: ItemDetailsArgs(vm.users[index], index),
                   );
                 },
               ),
