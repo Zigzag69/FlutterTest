@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test_app/data/models/user.dart';
 
 class RemoveItem {
@@ -14,7 +13,7 @@ class GetUsers {}
 class ShowResult {}
 
 class ShowUsersAction {
-  List<User> usersList;
+  final List<User> usersList;
   final Object bError;
 
   ShowUsersAction(this.usersList, this.bError);

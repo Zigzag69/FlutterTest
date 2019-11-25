@@ -149,6 +149,7 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () {
             vm.createUsers();
+            vm.getUsers();
           },
         ),
       ),
@@ -243,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     AppRoutes.item_details,
-                      arguments: ItemDetailsArgs(vm.users[index]),
+                    arguments: ItemDetailsArgs(vm.users[index]),
                   );
                 },
               ),
@@ -258,6 +259,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   vm.removeItem(vm.users[index].id);
+                  vm.users.removeAt(index);
                 },
               ),
             ),

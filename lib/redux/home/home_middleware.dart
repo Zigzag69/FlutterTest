@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_test_app/data/models/user.dart';
 import 'package:random_string/random_string.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_test_app/redux/base/app_state.dart';
@@ -24,12 +25,8 @@ class HomeMiddleware {
     NextDispatcher next,
   ) async {
     next(action);
-    await authRepo.deleteData(action.id).then((result) async {
-      await authRepo.getUsers().then((usersList) {
-        store.dispatch(ShowUsersAction(usersList, ''));
-      }).catchError((error) {
-        store.dispatch(ShowSError(error));
-      });
+    await authRepo.deleteData(action.id).then((result) {
+      store.dispatch(ShowResult());
     }).catchError((error) {
       print(error);
       store.dispatch(ShowSError(error));
@@ -45,6 +42,7 @@ class HomeMiddleware {
     await authRepo.getUsers().then((usersList) {
       store.dispatch(ShowUsersAction(usersList, ''));
     }).catchError((error) {
+      print(error);
       store.dispatch(ShowUsersAction([], error));
     });
   }
@@ -55,27 +53,22 @@ class HomeMiddleware {
     NextDispatcher next,
   ) async {
     next(action);
-//    for (var i = 0; i < 10; i++) {
-    for (var i = 0; i < 1; i++) {
+    List<User> usersList = List();
+    for (var i = 0; i < 10; i++) {
+//    for (var i = 0; i < 1; i++) {
       var randomFirstName = randomString(5);
       var randomLastName = randomString(5);
       var randomAge = randomBetween(5, 100);
       var randomId = Uuid.v1().time.toString();
-      await authRepo
-          .createUsers(randomFirstName, randomLastName, randomAge, randomId)
-          .then((result) async {
-        if (i == 0) {
-          await authRepo.getUsers().then((usersList) {
-            store.dispatch(ShowUsersAction(usersList, ''));
-            print(usersList);
-          }).catchError((error) {
-            store.dispatch(ShowSError(error));
-          });
-        }
-      }).catchError((error) {
-        print(error);
-        store.dispatch(ShowSError(error));
-      });
+      usersList.add(User(firstName: randomFirstName, lastName: randomLastName, age: randomAge, id: randomId));
     }
+    await authRepo
+        .createUsers(usersList)
+        .then((result) {
+      store.dispatch(ShowResult());
+    }).catchError((error) {
+      print(error);
+      store.dispatch(ShowSError(error));
+    });
   }
 }

@@ -54,29 +54,6 @@ class AuthRepo {
     return user;
   }
 
-  Future<void> createUsers(
-    String firstName,
-    String lastName,
-    int age,
-    String id,
-  ) async {
-//    await Future.delayed(Duration(seconds: 1));
-    var result = await Connectivity().checkConnectivity();
-    if (result == ConnectivityResult.none) {
-      throw PlatformException(
-        code: "Test error code",
-        message: messageNetworkError,
-      );
-    }
-
-    Firestore.instance.collection("users").document(id).setData({
-      'firstName': firstName,
-      'lastName': lastName,
-      'age': age,
-      'id': id,
-    });
-  }
-
   Future<void> signUp(
     String email,
     String password,
@@ -101,10 +78,33 @@ class AuthRepo {
     return user;
   }
 
+  Future<void> createUsers(List<User> usersList) async {
+    await Future.delayed(Duration(seconds: 1));
+    var result = await Connectivity().checkConnectivity();
+    if (result == ConnectivityResult.none) {
+      throw PlatformException(
+        code: "Test error code",
+        message: messageNetworkError,
+      );
+    }
+
+    for (var i = 0; i < usersList.length; i++) {
+       Firestore.instance
+          .collection("users")
+          .document(usersList[i].id)
+          .setData({
+        'firstName': usersList[i].firstName,
+        'lastName': usersList[i].lastName,
+        'age': usersList[i].age,
+        'id': usersList[i].id,
+      });
+    }
+  }
+
   Future<void> deleteData(
     String id,
   ) async {
-//    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
     var result = await Connectivity().checkConnectivity();
     if (result == ConnectivityResult.none) {
       throw PlatformException(
@@ -129,6 +129,9 @@ class AuthRepo {
       );
     }
 
-    await Firestore.instance.collection('users').document(id).updateData({'firstName' : firstName});
+    await Firestore.instance
+        .collection('users')
+        .document(id)
+        .updateData({'firstName': firstName});
   }
 }
