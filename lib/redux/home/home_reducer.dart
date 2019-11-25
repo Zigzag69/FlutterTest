@@ -50,7 +50,6 @@ HomePageState _showResult(HomePageState state, ShowResult action) {
 
 HomePageState _showSError(HomePageState state, ShowSError action) {
   return state.copyWith(
-    users: [],
     isLoading: false,
     sError: action.sError,
   );

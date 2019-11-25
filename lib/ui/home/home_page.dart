@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () {
             vm.createUsers();
-            vm.getUsers();
+//            vm.getUsers();
           },
         ),
       ),
@@ -259,7 +259,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   vm.removeItem(vm.users[index].id);
-                  vm.users.removeAt(index);
+//                  if (vm.sError == '') {
+//                    vm.users.removeAt(index);
+//                  }
                 },
               ),
             ),
