@@ -37,6 +37,8 @@ class ItemDetailsState extends Equatable {
   }
 
   bool isDefault() {
-    return isLoading == false && error == '' && result == '';
+    return isLoading == false &&
+        error == '' &&
+        result == '';
   }
 }

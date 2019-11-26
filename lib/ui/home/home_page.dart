@@ -34,6 +34,20 @@ class _HomePageState extends State<HomePage> {
     store.dispatch(ResetState());
   }
 
+  _onWillChange(HomePageViewModel vm) {
+    print("_onWillChange 1");
+    if (vm.isDefault) return;
+    if (vm.result == '') return;
+    print("_onWillChange 2");
+    vm.clearResult();
+    if ((vm.result == 'remove') && (vm.index != ''))  {
+      vm.users.removeAt(int.parse(vm.index));
+    }
+    if ((vm.result == 'create') && (vm.newUsers != []))  {
+      vm.users.addAll(vm.newUsers);
+    }
+  }
+
   _onDidChange(HomePageViewModel vm) {
     if (vm.isDefault) return;
     if (vm.sError == '') return;
@@ -80,6 +94,7 @@ class _HomePageState extends State<HomePage> {
         converter: HomePageViewModel.fromStore,
         onInit: _onInit,
         onDispose: _onDispose,
+        onWillChange: _onWillChange,
         onDidChange: _onDidChange,
         builder: (BuildContext context, HomePageViewModel vm) {
           return vm.loading
@@ -108,7 +123,7 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
-        _buildButtonLogOut(),
+        _buildButtonLogOut(vm),
       ],
     );
   }
@@ -149,7 +164,7 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () {
             vm.createUsers();
-//            vm.getUsers();
+            vm.getUsers();
           },
         ),
       ),
@@ -258,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                   height: 44.0,
                 ),
                 onPressed: () {
-                  vm.removeItem(vm.users[index].id);
+                  vm.removeItem(vm.users[index].id, index);
 //                    vm.users.removeAt(index);
                 },
               ),
@@ -267,7 +282,7 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  Widget _buildButtonLogOut() {
+  Widget _buildButtonLogOut(HomePageViewModel vm) {
     return Padding(
       padding: const EdgeInsets.only(top: 24, right: 24, left: 24, bottom: 24),
       child: SizedBox(

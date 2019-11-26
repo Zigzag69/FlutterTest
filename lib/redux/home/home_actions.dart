@@ -2,15 +2,22 @@ import 'package:flutter_test_app/data/models/user.dart';
 
 class RemoveUser {
   final String id;
+  final int index;
 
-  RemoveUser(this.id);
+  RemoveUser(this.id, this.index);
 }
 
 class CreateUsers {}
 
 class GetUsers {}
 
-class ShowResult {}
+class ShowResult {
+  final String result;
+  final String index;
+  final List<User> newUsers;
+
+  ShowResult(this.result, this.index, this.newUsers);
+}
 
 class ShowUsersAction {
   final List<User> usersList;
@@ -24,6 +31,8 @@ class ShowSError {
 
   ShowSError(this.sError);
 }
+
+class ClearResult {}
 
 class ClearSError {}
 

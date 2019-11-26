@@ -26,7 +26,7 @@ class HomeMiddleware {
   ) async {
     next(action);
     await authRepo.deleteData(action.id).then((result) {
-      store.dispatch(ShowResult());
+      store.dispatch(ShowResult('remove', action.index.toString(), []));
     }).catchError((error) {
       print(error);
       store.dispatch(ShowSError(error));
@@ -54,8 +54,8 @@ class HomeMiddleware {
   ) async {
     next(action);
     List<User> usersList = List();
-    for (var i = 0; i < 10; i++) {
-//    for (var i = 0; i < 1; i++) {
+//    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 1; i++) {
       var randomFirstName = randomString(5);
       var randomLastName = randomString(5);
       var randomAge = randomBetween(5, 100);
@@ -68,7 +68,7 @@ class HomeMiddleware {
       ));
     }
     await authRepo.createUsers(usersList).then((result) {
-      store.dispatch(ShowResult());
+      store.dispatch(ShowResult('create', '', usersList));
     }).catchError((error) {
       print(error);
       store.dispatch(ShowSError(error));

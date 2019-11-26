@@ -9,6 +9,7 @@ Reducer<HomePageState> homePageReducer = combineReducers<HomePageState>([
   TypedReducer<HomePageState, CreateUsers>(_createUsers),
   TypedReducer<HomePageState, ShowSError>(_showSError),
   TypedReducer<HomePageState, ClearSError>(_clearSError),
+  TypedReducer<HomePageState, ClearResult>(_clearResult),
   TypedReducer<HomePageState, ResetState>(_resetState),
   TypedReducer<HomePageState, ShowResult>(_showResult),
 ]);
@@ -45,6 +46,9 @@ HomePageState _createUsers(HomePageState state, CreateUsers action) {
 HomePageState _showResult(HomePageState state, ShowResult action) {
   return state.copyWith(
     isLoading: false,
+    result: action.result,
+    index: action.index,
+    newUsers: action.newUsers,
   );
 }
 
@@ -61,7 +65,12 @@ HomePageState _clearSError(HomePageState state, ClearSError action) {
   );
 }
 
+HomePageState _clearResult(HomePageState state, ClearResult action) {
+  return state.copyWith(
+    result: '',
+  );
+}
+
 HomePageState _resetState(HomePageState state, ResetState action) {
   return HomePageState.initial();
 }
-

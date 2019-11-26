@@ -7,6 +7,9 @@ class HomePageState extends Equatable {
   final bool isLoading;
   final Object sError;
   final Object bError;
+  final String result;
+  final String index;
+  final List<User> newUsers;
   final List<User> users;
 
   HomePageState({
@@ -14,11 +17,17 @@ class HomePageState extends Equatable {
     this.sError,
     this.bError,
     this.users,
+    this.result,
+    this.index,
+    this.newUsers,
   }) : super([
           isLoading,
           sError,
           bError,
           users,
+          result,
+          index,
+          newUsers,
         ]);
 
   factory HomePageState.initial() {
@@ -26,7 +35,10 @@ class HomePageState extends Equatable {
       isLoading: false,
       sError: '',
       bError: '',
+      result: '',
+      index: '',
       users: [],
+      newUsers: [],
     );
   }
 
@@ -34,12 +46,18 @@ class HomePageState extends Equatable {
     bool isLoading,
     Object sError,
     Object bError,
+    String result,
+    String index,
     List<User> users,
+    List<User> newUsers,
   }) {
     return HomePageState(
       isLoading: isLoading ?? this.isLoading,
       sError: sError ?? this.sError,
       bError: bError ?? this.bError,
+      result: result ?? this.result,
+      index: index ?? this.index,
+      newUsers: newUsers ?? this.newUsers,
       users: users ?? this.users,
     );
   }
@@ -48,6 +66,9 @@ class HomePageState extends Equatable {
     return isLoading == false &&
         sError == '' &&
         bError == '' &&
-        users.isEmpty;
+        result == '' &&
+        index == '' &&
+        users.isEmpty &&
+        newUsers.isEmpty;
   }
 }
