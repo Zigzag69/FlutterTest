@@ -35,10 +35,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   _onWillChange(HomePageViewModel vm) {
-    print("_onWillChange 1");
     if (vm.isDefault) return;
     if (vm.result == '') return;
-    print("_onWillChange 2");
     vm.clearResult();
     if ((vm.result == 'remove') && (vm.index != ''))  {
       vm.users.removeAt(int.parse(vm.index));

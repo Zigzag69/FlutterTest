@@ -11,7 +11,6 @@ import 'package:flutter_test_app/redux/sign_in/sign_in_actions.dart';
 class SignInPageViewModel extends Equatable {
   final bool loading;
   final String email;
-  final String password;
   final Object error;
   final Function(String, String) signIn;
   final bool isDefault;
@@ -19,7 +18,6 @@ class SignInPageViewModel extends Equatable {
   SignInPageViewModel({
     this.loading,
     this.email,
-    this.password,
     this.error,
     this.signIn,
     this.isDefault,
@@ -27,7 +25,6 @@ class SignInPageViewModel extends Equatable {
   }) : super([
           loading,
           email,
-          password,
           error,
           isDefault,
         ]);
@@ -38,7 +35,6 @@ class SignInPageViewModel extends Equatable {
     return SignInPageViewModel(
       loading: state.isLoading,
       email: state.email,
-      password: state.password,
       error: state.error,
       signIn: (email, password) => store.dispatch(SignIn(email, password)),
       isDefault: state.isDefault(),

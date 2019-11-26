@@ -16,17 +16,17 @@ class HomePageState extends Equatable {
     this.isLoading,
     this.sError,
     this.bError,
-    this.users,
     this.result,
     this.index,
+    this.users,
     this.newUsers,
   }) : super([
           isLoading,
           sError,
           bError,
-          users,
           result,
           index,
+          users,
           newUsers,
         ]);
 
@@ -57,8 +57,8 @@ class HomePageState extends Equatable {
       bError: bError ?? this.bError,
       result: result ?? this.result,
       index: index ?? this.index,
-      newUsers: newUsers ?? this.newUsers,
       users: users ?? this.users,
+      newUsers: newUsers ?? this.newUsers,
     );
   }
 

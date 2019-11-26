@@ -54,8 +54,8 @@ class HomeMiddleware {
   ) async {
     next(action);
     List<User> usersList = List();
-//    for (var i = 0; i < 10; i++) {
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < 10; i++) {
+//    for (var i = 0; i < 1; i++) {
       var randomFirstName = randomString(5);
       var randomLastName = randomString(5);
       var randomAge = randomBetween(5, 100);

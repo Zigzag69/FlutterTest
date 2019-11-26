@@ -54,7 +54,6 @@ class _SignInPageState extends State<SignInPage> {
   _onWillChange(SignInPageViewModel vm) {
     if (vm.isDefault) return;
     if (vm.email == '') return;
-    if (vm.password == '') return;
     vm.resetState();
     Navigator.of(context).pushNamedAndRemoveUntil(
       AppRoutes.home_page,

@@ -13,7 +13,6 @@ SignInPageState _signIn(SignInPageState state, SignIn action) {
   return state.copyWith(
     isLoading: true,
     email: '',
-    password: '',
     error: '',
   );
 }
@@ -22,7 +21,6 @@ SignInPageState _showResult(SignInPageState state, ShowResult action) {
   return state.copyWith(
     isLoading: false,
     email: action.email,
-    password: action.password
   );
 }
 

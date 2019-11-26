@@ -10,10 +10,10 @@ import 'package:flutter_test_app/data/models/user.dart';
 @immutable
 class HomePageViewModel extends Equatable {
   final bool loading;
-  final String result;
   final Object sError;
   final Object bError;
   final bool isDefault;
+  final String result;
   final String index;
   final List<User> users;
   final List<User> newUsers;
@@ -27,9 +27,9 @@ class HomePageViewModel extends Equatable {
 
   HomePageViewModel({
     this.loading,
-    this.result,
     this.sError,
     this.bError,
+    this.result,
     this.isDefault,
     this.index,
     this.users,
@@ -43,9 +43,9 @@ class HomePageViewModel extends Equatable {
     this.removeItem,
   }) : super([
           loading,
-          result,
           sError,
           bError,
+          result,
           isDefault,
           index,
           users,
@@ -57,16 +57,16 @@ class HomePageViewModel extends Equatable {
 
     return HomePageViewModel(
       loading: state.isLoading,
-      result: state.result,
       sError: state.sError,
       bError: state.bError,
+      result: state.result,
       index: state.index,
       users: state.users,
       newUsers: state.newUsers,
       isDefault: state.isDefault(),
 
-      clearSError: () => store.dispatch(ClearSError),
-      clearResult: () => store.dispatch(ClearResult),
+      clearSError: () => store.dispatch(ClearSError()),
+      clearResult: () => store.dispatch(ClearResult()),
       removeItem: (id, index) => store.dispatch(RemoveUser(id, index)),
       getUsers: () => store.dispatch(GetUsers()),
       createUsers: () => store.dispatch(CreateUsers()),

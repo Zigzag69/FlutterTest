@@ -25,6 +25,8 @@ HomePageState _removeItem(HomePageState state, RemoveUser action) {
   return state.copyWith(
     isLoading: true,
     sError: '',
+    result: '',
+    index: '',
   );
 }
 
@@ -40,6 +42,8 @@ HomePageState _createUsers(HomePageState state, CreateUsers action) {
   return state.copyWith(
     isLoading: true,
     sError: '',
+    result: '',
+    newUsers: [],
   );
 }
 
