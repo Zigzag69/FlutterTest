@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:redux/redux.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +51,7 @@ class HomePageViewModel extends Equatable {
       isDefault: state.isDefault(),
       users: state.users,
       clearSError: () => store.dispatch(ClearSError),
-      removeItem: (id) => store.dispatch(RemoveItem(id)),
+      removeItem: (id) => store.dispatch(RemoveUser(id)),
       getUsers: () => store.dispatch(GetUsers()),
       createUsers: () => store.dispatch(CreateUsers()),
       resetState: () => store.dispatch(ResetState()),

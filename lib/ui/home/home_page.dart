@@ -259,9 +259,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   vm.removeItem(vm.users[index].id);
-//                  if (vm.sError == '') {
 //                    vm.users.removeAt(index);
-//                  }
                 },
               ),
             ),
@@ -296,6 +294,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _errorWidget(HomePageViewModel vm) {
+    String message;
+    if (vm.bError is PlatformException) {
+      PlatformException pe = vm.bError;
+      message = pe.message;
+    } else {
+      message = vm.bError.toString();
+    }
     return Padding(
       padding: EdgeInsets.all(36),
       child: Column(
@@ -303,7 +308,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            vm.bError.toString(),
+            message,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'poppins_medium',

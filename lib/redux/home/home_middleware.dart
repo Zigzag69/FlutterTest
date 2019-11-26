@@ -13,15 +13,15 @@ class HomeMiddleware {
 
   List<Middleware<AppState>> getMiddleware() {
     return <Middleware<AppState>>[
-      TypedMiddleware<AppState, RemoveItem>(_removeItem),
+      TypedMiddleware<AppState, RemoveUser>(_removeUser),
       TypedMiddleware<AppState, GetUsers>(_getUsers),
       TypedMiddleware<AppState, CreateUsers>(_createUsers),
     ];
   }
 
-  Future _removeItem(
+  Future _removeUser(
     Store<AppState> store,
-    RemoveItem action,
+    RemoveUser action,
     NextDispatcher next,
   ) async {
     next(action);
@@ -60,11 +60,14 @@ class HomeMiddleware {
       var randomLastName = randomString(5);
       var randomAge = randomBetween(5, 100);
       var randomId = Uuid.v1().time.toString();
-      usersList.add(User(firstName: randomFirstName, lastName: randomLastName, age: randomAge, id: randomId));
+      usersList.add(User(
+        firstName: randomFirstName,
+        lastName: randomLastName,
+        age: randomAge,
+        id: randomId,
+      ));
     }
-    await authRepo
-        .createUsers(usersList)
-        .then((result) {
+    await authRepo.createUsers(usersList).then((result) {
       store.dispatch(ShowResult());
     }).catchError((error) {
       print(error);

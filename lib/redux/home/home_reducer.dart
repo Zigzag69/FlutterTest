@@ -3,7 +3,7 @@ import 'package:flutter_test_app/redux/home/home_state.dart';
 import 'package:flutter_test_app/redux/home/home_actions.dart';
 
 Reducer<HomePageState> homePageReducer = combineReducers<HomePageState>([
-  TypedReducer<HomePageState, RemoveItem>(_removeItem),
+  TypedReducer<HomePageState, RemoveUser>(_removeItem),
   TypedReducer<HomePageState, GetUsers>(_getUsers),
   TypedReducer<HomePageState, ShowUsersAction>(_showUsers),
   TypedReducer<HomePageState, CreateUsers>(_createUsers),
@@ -20,7 +20,7 @@ HomePageState _getUsers(HomePageState state, GetUsers action) {
   );
 }
 
-HomePageState _removeItem(HomePageState state, RemoveItem action) {
+HomePageState _removeItem(HomePageState state, RemoveUser action) {
   return state.copyWith(
     isLoading: true,
     sError: '',

@@ -1,9 +1,9 @@
 import 'package:flutter_test_app/data/models/user.dart';
 
-class RemoveItem {
+class RemoveUser {
   final String id;
 
-  RemoveItem(this.id);
+  RemoveUser(this.id);
 }
 
 class CreateUsers {}

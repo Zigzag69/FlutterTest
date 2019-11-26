@@ -48,6 +48,6 @@ class HomePageState extends Equatable {
     return isLoading == false &&
         sError == '' &&
         bError == '' &&
-        users == [];
+        users.isEmpty;
   }
 }
